@@ -1,13 +1,13 @@
 
-class Chord {
+class ChordChart {
     /**
      * Creates a bubble chart Object
      */
 
     // https://observablehq.com/@d3/chord-diagram
     // chord chart takes array of 10*10 as input
-    constructor() {
-        //this.data = data
+    constructor(data) {
+        this.originalData = data
         this.vizWidth = 400;
         this.vizHeight = 400;
         this.drawChart()
@@ -20,18 +20,89 @@ class Chord {
     }   
 
     setup(){
+
+        console.log(this.originalData);
+        let countries = [];
+        for (let i = 0; i < this.originalData.length; i++)
+            countries.push(this.originalData[i].country);
+
+        function unique(arr) {
+            let newArr = [];
+            return arr.filter(function(item){
+                return newArr.includes(item)?"":newArr.push(item)
+            })
+            return newArr;
+        }
+
+        function findCountries(arr) {
+            switch(arr){
+                case "China": return "CHN"; break;
+                case "United States": return "USA"; break;
+                case "Australia": return "AUS"; break;
+                case "Germany": return "GER"; break;
+                case "Japan": return "JAP"; break;
+                case "Korea, Rep.": return "KOR"; break;
+                case "Malaysia": return "MAL"; break;
+                case "Singapore": return "SIN"; break;
+                case "Thailand": return "THA"; break;
+                case "Vietnam": return "VIE"; break;
+            }
+        }
+
+        function sum(arr) {
+            return arr.reduce(function(acr, cur){
+              return acr + cur;
+            });
+          }
+
+        let temp = [];
+        let processData = {CHN:[], USA:[], AUS:[], GER:[], JAP:[], KOR:[], MAL:[], SIN:[], THA:[], VIE:[]};
+        countries = unique(countries);
+        console.log(processData);
+        for (let k = 0; k < countries.length; k++) {
+            for (let i = 0; i < this.originalData.length; i++) {
+                if (this.originalData[i].country == countries[k]) {
+                    if (this.originalData[i].tradeType == 'Import') {
+                        for (let j = 0; j < countries.length; j++) {
+                            if (this.originalData[i].traders == countries[j]) {
+                                temp.push(this.originalData[i].TradeData[28]);
+                            }
+                        } 
+                    }
+                }
+            }
+            processData[findCountries(countries[k])] = temp;
+            temp = [];
+        }
+        
+        for (let i = 0; i < countries.length; i++) {
+            processData[findCountries(countries[i])].splice(i, 0, 0);
+        }
+        processData['VIE'][0] = 0;
+        for(let i = 0; i < countries.length; i++) {
+            let tradeSum = sum(processData[findCountries(countries[i])]);
+            for (let j = 0; j < processData[findCountries(countries[i])].length; j++) {
+                processData[findCountries(countries[i])][j] = processData[findCountries(countries[i])][j] / tradeSum;
+            }
+            tradeSum = 0.0;
+        }
+        console.log(countries);
+        console.log(processData);
+        
         this.data = Object.assign([
-            [.096899, .008859, .000554, .004430, .025471, .024363, .005537, .025471],
-            [.001107, .018272, .000000, .004983, .011074, .010520, .002215, .004983],
-            [.000554, .002769, .002215, .002215, .003876, .008306, .000554, .003322],
-            [.000554, .001107, .000554, .012182, .011628, .006645, .004983, .010520],
-            [.002215, .004430, .000000, .002769, .104097, .012182, .004983, .028239],
-            [.011628, .026024, .000000, .013843, .087486, .168328, .017165, .055925],
-            [.000554, .004983, .000000, .003322, .004430, .008859, .017719, .004430],
-            [.002215, .007198, .000000, .003322, .016611, .014950, .001107, .054264]
+            processData['CHN'],
+            processData['USA'],
+            processData['AUS'],
+            processData['GER'],
+            processData['JAP'],
+            processData['KOR'],
+            processData['MAL'],
+            processData['SIN'],
+            processData['THA'],
+            processData['VIE']
             ], {
-            names: ["Apple", "HTC", "Huawei", "LG", "Nokia", "Samsung", "Sony", "Other"],
-            colors: ["#c4c4c4", "#69b40f", "#ec1d25", "#c8125c", "#008fc8", "#10218b", "#134b24", "#737373"]
+            names: ['China', 'United States', 'Australia', 'Germany', 'Japan', 'Korea, Rep.', 'Malaysia', 'Singapore', 'Thailand', 'Vietnam'],
+            colors: ["#c4c4c4", "#69b40f", "#ec1d25", "#c8125c", "#008fc8", "#10218b", "#134b24", "#737373", "#c4134c", "#11714b"]
             })
         this.names = this.data.names === undefined ? d3.range(this.data.length) : this.data.names
         this.colors = this.data.colors === undefined ? d3.quantize(d3.interpolateRainbow, names.length) : this.data.colors
@@ -46,8 +117,6 @@ class Chord {
             .padAngle(10 / innerRadius)
             .sortSubgroups(d3.descending)
             .sortChords(d3.descending)
-
-        
 
         this.arc = d3.arc()
             .innerRadius(innerRadius)
@@ -127,5 +196,6 @@ class Chord {
                 .text(d => `${this.formatValue(d.source.value)} ${names[d.target.index]} → ${names[d.source.index]}${d.source.index === d.target.index ? "" : `\n${this.formatValue(d.target.value)} ${names[d.source.index]} → ${names[d.target.index]}`}`);
             
     }
+
 
 }

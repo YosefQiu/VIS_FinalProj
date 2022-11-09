@@ -75,7 +75,7 @@ class LineChart {
 
         this.lineChart.select('#y-axis')
             .attr('transform', `translate(${this.padding.left},0)`)
-            .call(d3.axisLeft(yAxis));
+            .call(d3.axisLeft(yAxis).tickFormat(d3.format('.2s')));
 
         //console.log(groupedLocationData)
         this.lineChart
