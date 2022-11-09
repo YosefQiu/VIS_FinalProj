@@ -73,4 +73,5 @@ d3.csv('./dataset2.csv')
         let line_chart = new LineChart(dataResult);
     });
 
+let chord = new Chord();
     
