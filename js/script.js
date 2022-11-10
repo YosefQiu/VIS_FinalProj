@@ -29,7 +29,7 @@ function checkYear(num) {
 let aa = checkYear(0);
 console.log(aa);
 
-d3.csv('./dataset2.csv')
+d3.csv('./ProcessedData/dataset2.csv')
     .then(dataOutput => {
         const dataResult = dataOutput.map((d) =>({
             country: String(d.ReporterName),
