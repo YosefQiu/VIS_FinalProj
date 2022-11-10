@@ -137,14 +137,10 @@ class ChordChart {
         d3.select("#chordCharts").attr("viewBox", [-this.vizWidth / 2 , -this.vizWidth / 2, this.vizWidth, this.vizWidth])
         let svg;
         if (this.TradeType == "Import") {
-            svg = d3.select("#Import")
-            .attr("transform", `translate(-200,0)`);
-            //.attr("viewBox", [-this.vizWidth / 2+200, -this.vizWidth / 2, this.vizWidth, this.vizWidth])
+            svg = d3.select("#Import").attr("transform", `translate(-200,0)`);
         }
         else {
-            svg = d3.select("#Export")
-                .attr("transform", `translate(200,0)`);
-            //.attr("viewBox", [-this.vizWidth / 2 -200, -this.vizWidth / 2, this.vizWidth, this.vizWidth])
+            svg = d3.select("#Export").attr("transform", `translate(200,0)`);
         }
 
         

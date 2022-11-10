@@ -70,7 +70,8 @@ d3.csv('./dataset2.csv')
 
         //console.log(dataResult);
 
-        let line_chart = new LineChart(dataResult);
+        let line_chart_Import = new LineChart(dataResult, "Import","China");
+        let line_chart_Export = new LineChart(dataResult, "Export","China");
 
         let chord_Importchart = new ChordChart(dataResult, "Import", 2020);
         let chord_Exportchart = new ChordChart(dataResult, "Export", 2020);

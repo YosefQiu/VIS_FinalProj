@@ -3,9 +3,11 @@ class LineChart {
     * Creates a LineChart
     * @param globalApplicationState The shared global application state (has the data and map instance in it)
     */
-    constructor(data) {
+    constructor(data,tradeType,country) {
         // Set some class level variables
+        this.tradeType = tradeType
         this.lineChart = d3.select('#line-chart')
+        
         this.padding = { left: 80, bottom: 150, right: 50 }
 
         // x axis text
@@ -23,9 +25,7 @@ class LineChart {
             .attr('y', 25)
             .attr('transform', 'rotate(-90)');
 
-        let country = "China"
-        let TradingType = "Import"
-        let LineChartData = data.filter(v => v.country === country && v.tradeType === TradingType);
+        let LineChartData = data.filter(v => v.country === country && v.tradeType === this.tradeType);
 
         let temp_data=[]
         LineChartData.forEach(element => {
@@ -46,8 +46,43 @@ class LineChart {
         this.updateLineChart(temp_data);
     }
     updateLineChart(LineChartData) {
-        //console.log(LineChartData)
-        this.lineChart = d3.select('#line-chart')
+        
+        if (this.tradeType == "Import") {
+            this.lineChart = this.lineChart.select('#Import')
+            this.lineChart.attr("transform", `translate(700,0)`);
+            // x axis text
+            this.lineChart
+                .append('text')
+                .text('Year')
+                .attr('x', 350)
+                .attr('y', 500);
+
+            // Append y axis text
+            this.lineChart
+                .append('text')
+                .text('Trading Amount in US dolloar')
+                .attr('x', -250)
+                .attr('y', 25)
+                .attr('transform', 'rotate(-90)');
+           
+        }
+        else {
+            this.lineChart = this.lineChart.select('#Export')
+            // x axis text
+            this.lineChart
+                .append('text')
+                .text('Year')
+                .attr('x', 350)
+                .attr('y', 500);
+
+            // Append y axis text
+            this.lineChart
+                .append('text')
+                .text('Trading Amount in US dolloar')
+                .attr('x', -250)
+                .attr('y', 25)
+                .attr('transform', 'rotate(-90)');
+        }
   
         // current linechart data should be an array of length 9-10 (countries)
 
