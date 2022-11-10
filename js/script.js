@@ -72,7 +72,8 @@ d3.csv('./dataset2.csv')
 
         let line_chart = new LineChart(dataResult);
 
-        let chord_chart = new ChordChart(dataResult);
+        let chord_Importchart = new ChordChart(dataResult, "Import", 2020);
+        let chord_Exportchart = new ChordChart(dataResult, "Export", 2020);
     });
 
 // let chord = new Chord();

@@ -6,10 +6,12 @@ class ChordChart {
 
     // https://observablehq.com/@d3/chord-diagram
     // chord chart takes array of 10*10 as input
-    constructor(data) {
+    constructor(data,Tradetype,year) {
         this.originalData = data
         this.vizWidth = 400;
         this.vizHeight = 400;
+        this.TradeType = Tradetype;
+        this.year = year-1992;
         this.drawChart()
         
     }
@@ -21,7 +23,6 @@ class ChordChart {
 
     setup(){
 
-        console.log(this.originalData);
         let countries = [];
         for (let i = 0; i < this.originalData.length; i++)
             countries.push(this.originalData[i].country);
@@ -62,10 +63,10 @@ class ChordChart {
         for (let k = 0; k < countries.length; k++) {
             for (let i = 0; i < this.originalData.length; i++) {
                 if (this.originalData[i].country == countries[k]) {
-                    if (this.originalData[i].tradeType == 'Import') {
+                    if (this.originalData[i].tradeType == this.TradeType) {
                         for (let j = 0; j < countries.length; j++) {
                             if (this.originalData[i].traders == countries[j]) {
-                                temp.push(this.originalData[i].TradeData[28]);
+                                temp.push(this.originalData[i].TradeData[this.year]);
                             }
                         } 
                     }
@@ -79,15 +80,15 @@ class ChordChart {
             processData[findCountries(countries[i])].splice(i, 0, 0);
         }
         processData['VIE'][0] = 0;
+        let tradeSum = 0;
         for(let i = 0; i < countries.length; i++) {
-            let tradeSum = sum(processData[findCountries(countries[i])]);
+            tradeSum += sum(processData[findCountries(countries[i])]);
+        }
+        for (let i = 0; i < countries.length; i++) {
             for (let j = 0; j < processData[findCountries(countries[i])].length; j++) {
                 processData[findCountries(countries[i])][j] = processData[findCountries(countries[i])][j] / tradeSum;
             }
-            tradeSum = 0.0;
         }
-        console.log(countries);
-        console.log(processData);
         
         this.data = Object.assign([
             processData['CHN'],
@@ -103,7 +104,8 @@ class ChordChart {
             ], {
             names: ['China', 'United States', 'Australia', 'Germany', 'Japan', 'Korea, Rep.', 'Malaysia', 'Singapore', 'Thailand', 'Vietnam'],
             colors: ["#c4c4c4", "#69b40f", "#ec1d25", "#c8125c", "#008fc8", "#10218b", "#134b24", "#737373", "#c4134c", "#11714b"]
-            })
+        })
+
         this.names = this.data.names === undefined ? d3.range(this.data.length) : this.data.names
         this.colors = this.data.colors === undefined ? d3.quantize(d3.interpolateRainbow, names.length) : this.data.colors
         
@@ -128,74 +130,86 @@ class ChordChart {
 
         this.color = d3.scaleOrdinal(this.names, this.colors)
         
-        //d3 = require("d3@6")
     }
     // this will be called in script.js 
     // when the year changes
     updateChart() {
-            const svg = d3.select("#chordCharts")
-            .attr("viewBox", [-400 / 2, -400 / 2, 400, 400])
+        d3.select("#chordCharts").attr("viewBox", [-this.vizWidth / 2 , -this.vizWidth / 2, this.vizWidth, this.vizWidth])
+        let svg;
+        if (this.TradeType == "Import") {
+            svg = d3.select("#Import")
+            .attr("transform", `translate(-200,0)`);
+            //.attr("viewBox", [-this.vizWidth / 2+200, -this.vizWidth / 2, this.vizWidth, this.vizWidth])
+        }
+        else {
+            svg = d3.select("#Export")
+                .attr("transform", `translate(200,0)`);
+            //.attr("viewBox", [-this.vizWidth / 2 -200, -this.vizWidth / 2, this.vizWidth, this.vizWidth])
+        }
+
+        
           
-            const chords = this.chord(this.data);
+        const chords = this.chord(this.data);
           
-            const group = svg.append("g")
-                .attr("font-size", 5)
-                .attr("font-family", "sans-serif")
-              .selectAll("g")
-              .data(chords.groups)
-              .join("g");
+        const group = svg.append("g")
+            .attr("font-size", 5)
+            .attr("font-family", "sans-serif")
+            .selectAll("g")
+            .data(chords.groups)
+            .join("g");
           
-            group.append("path")
-                .attr("fill", d => this.color(this.names[d.index]))
-                .attr("d", this.arc);
+        group.append("path")
+            .attr("fill", d => this.color(this.names[d.index]))
+            .attr("d", this.arc);
           
-            group.append("title")
-                .text(d => `${this.names[d.index]}
-          ${this.formatValue(d.value)}`);
-          let tickStep = d3.tickStep(0, d3.sum(this.data.flat()), 100)
-          function ticks({startAngle, endAngle, value}) {
-            const k = (endAngle - startAngle) / value;
-            return d3.range(0, value, tickStep).map(value => {
-              return {value, angle: value * k + startAngle};
+        group.append("title")
+            .text(d => `${this.names[d.index]}
+        ${this.formatValue(d.value)}`);
+    let tickStep = d3.tickStep(0, d3.sum(this.data.flat()), 100)
+
+    function ticks({ startAngle, endAngle, value }) {
+        const k = (endAngle - startAngle) / value;
+        return d3.range(0, value, tickStep).map(value => {
+            return {value, angle: value * k + startAngle};
+        });
+        }
+        const groupTick = group.append("g")
+            .selectAll("g")
+            .data(ticks)
+            .join("g")
+            .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(${this.outerRadius},0)`);
+          
+        groupTick.append("line")
+            .attr("stroke", "currentColor")
+            .attr("x2", 6);
+          
+        groupTick.append("text")
+            .attr("x", 8)
+            .attr("dy", "0.35em")
+            .attr("transform", d => d.angle > Math.PI ? "rotate(180) translate(-16)" : null)
+            .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
+            .text(d => this.formatValue(d.value));
+        let names = this.names
+        group.select("text")
+            .attr("font-weight", "bold")
+            .text(function(d) {
+                return this.getAttribute("text-anchor") === "end"
+                    ? `↑ ${names[d.index]}`
+                    : `${names[d.index]} ↓`;
             });
-          }
-            const groupTick = group.append("g")
-              .selectAll("g")
-              .data(ticks)
-              .join("g")
-                .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(${this.outerRadius},0)`);
           
-            groupTick.append("line")
-                .attr("stroke", "currentColor")
-                .attr("x2", 6);
-          
-            groupTick.append("text")
-                .attr("x", 8)
-                .attr("dy", "0.35em")
-                .attr("transform", d => d.angle > Math.PI ? "rotate(180) translate(-16)" : null)
-                .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
-                .text(d => this.formatValue(d.value));
-            let names = this.names
-            group.select("text")
-                .attr("font-weight", "bold")
-                .text(function(d) {
-                  return this.getAttribute("text-anchor") === "end"
-                      ? `↑ ${names[d.index]}`
-                      : `${names[d.index]} ↓`;
-                });
-          
-            svg.append("g")
-                .attr("fill-opacity", 0.8)
-              .selectAll("path")
-              .data(chords)
-              .join("path")
-                .style("mix-blend-mode", "multiply")
-                .attr("fill", d => this.color(names[d.source.index]))
-                .attr("d", this.ribbon)
-              .append("title")
-                .text(d => `${this.formatValue(d.source.value)} ${names[d.target.index]} → ${names[d.source.index]}${d.source.index === d.target.index ? "" : `\n${this.formatValue(d.target.value)} ${names[d.source.index]} → ${names[d.target.index]}`}`);
+        svg.append("g")
+            .attr("fill-opacity", 0.8)
+            .selectAll("path")
+            .data(chords)
+            .join("path")
+            .style("mix-blend-mode", "multiply")
+            .attr("fill", d => this.color(names[d.source.index]))
+            .attr("d", this.ribbon)
+            .append("title")
+            .text(d => `${this.formatValue(d.source.value)} ${names[d.target.index]} → ${names[d.source.index]}${d.source.index === d.target.index ? "" : `\n${this.formatValue(d.target.value)} ${names[d.source.index]} → ${names[d.target.index]}`}`);
             
-    }
+}
 
 
 }
