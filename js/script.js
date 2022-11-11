@@ -77,5 +77,15 @@ d3.csv('./ProcessedData/dataset2.csv')
         let chord_Exportchart = new ChordChart(dataResult, "Export", 2020);
     });
 
-// let chord = new Chord();
-    
+
+    window.onload  = function(){
+        let option = document.getElementById("option");
+        let page_tt_label = document.getElementById("page_tt_label");
+        let page_tt= document.getElementById("page_tt");
+       
+           option.onchange = function(e){
+              let val = e.target.value;
+              page_tt.value = val;
+              page_tt_label.innerHTML = val;
+           }                           
+       }
