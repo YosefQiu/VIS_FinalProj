@@ -10,6 +10,9 @@ class LineChart {
         
         this.padding = { left: 80, bottom: 150, right: 50 }
 
+        let svg_w = 1500;
+        let svg_h = 600;        
+        // console.log('width', svg_width);
         // x axis text
         this.lineChart
             .append('text')
@@ -23,7 +26,7 @@ class LineChart {
             .text('Trading Amount in US dolloar')
             .attr('x', -250)
             .attr('y', 25)
-            .attr('transform', 'rotate(-90)');
+            .attr('transform', 'translate(0,50)rotate(-90)');
 
         let LineChartData = data.filter(v => v.country === country && v.tradeType === this.tradeType);
 
@@ -63,7 +66,7 @@ class LineChart {
                 .text('Trading Amount in US dolloar')
                 .attr('x', -250)
                 .attr('y', 25)
-                .attr('transform', 'rotate(-90)');
+                .attr('transform', 'translate(0,50)rotate(-90)');
            
         }
         else {
@@ -81,7 +84,7 @@ class LineChart {
                 .text('Trading Amount in US dolloar')
                 .attr('x', -250)
                 .attr('y', 25)
-                .attr('transform', 'rotate(-90)');
+                .attr('transform', 'translate(0,50)rotate(-90)');
         }
   
         // current linechart data should be an array of length 9-10 (countries)
@@ -89,6 +92,7 @@ class LineChart {
         // year: 1992-2020
 
         let groupedLocationData = d3.group(LineChartData, d => d.traders)
+        let lineColors = ['#d98032', '#ef3e36', '#17bebb', '#237373', '#2e282a', '#5e4c43', '#8e705b', '#edb88b', '#f4c8b1', '#fad8d6']
         this.lineColorScale = d3.scaleOrdinal(d3.schemeTableau10).domain(groupedLocationData.keys());
         const tickLabels = [];
 
@@ -131,47 +135,47 @@ class LineChart {
                 .y((d) => (d3.format(".2s")(yAxis(parseFloat(d.data)))))
                 (values))
 
-        // // interative section
-        // this.lineChart.on('mousemove', (event) => {
-        //     if (event.offsetX > this.padding.left && event.offsetX < 700 - this.padding.right && this.click) {
-        //         // Set the line position
+        // interative section
+        this.lineChart.on('mousemove', (event) => {
+            if (event.offsetX > this.padding.left && event.offsetX < 700 - this.padding.right && this.click) {
+                // Set the line position
 
-        //         this.lineChart
-        //             .select('#overlay')
-        //             .select('line')
-        //             .attr('stroke', 'black')
-        //             .attr('x1', event.offsetX)
-        //             .attr('x2', event.offsetX)
-        //             .attr('y1', 600 - this.padding.bottom)
-        //             .attr('y2', 0);
+                this.lineChart
+                    .select('#overlay')
+                    .select('line')
+                    .attr('stroke', 'black')
+                    .attr('x1', event.offsetX)
+                    .attr('x2', event.offsetX)
+                    .attr('y1', 600 - this.padding.bottom)
+                    .attr('y2', 0);
 
-        //         //// round date data 
-        //         const dateHovered = xAxis.invert(event.offsetX)
-        //         dateHovered.setTime(dateHovered.getTime() + (12 * 60 * 60 * 1000));
-        //         dateHovered.setHours(0, 0, 0, 0);
+                //// round date data 
+                const dateHovered = xAxis.invert(event.offsetX)
+                dateHovered.setTime(dateHovered.getTime() + (12 * 60 * 60 * 1000));
+                dateHovered.setHours(0, 0, 0, 0);
 
-        //         // sort data
-        //         const filteredData = dataLookup
-        //             .filter((row) => +row.date === +dateHovered)
-        //             .sort((rowA, rowB) => rowB.total_cases_per_million - rowA.total_cases_per_million)
+                // sort data
+                const filteredData = dataLookup
+                    .filter((row) => +row.date === +dateHovered)
+                    .sort((rowA, rowB) => rowB.total_cases_per_million - rowA.total_cases_per_million)
 
-        //         // flag to switch side
-        //         let condition = event.offsetX > 500 - this.padding.right
+                // flag to switch side
+                let condition = event.offsetX > 500 - this.padding.right
 
-        //         // draw text labels
-        //         this.lineChart.select('#overlay')
-        //             .selectAll('text')
-        //             .data(filteredData)
-        //             .join('text')
-        //             //.text(d => d.total_cases_per_million > 1000 ? `${d.location}, ${Math.round(d.total_cases_per_million / 1000)}k` : `${d.location}, ${Math.round(d.total_cases_per_million)}`)
-        //             .text(d => `${d.location}, ${d3.format(".2s")(d.total_cases_per_million)}`)
-        //             .attr('x', condition ? event.offsetX - 150 : event.offsetX + 20)
-        //             .attr('y', (d, i) => 20 * i + 20)
-        //             .attr('alignment-baseline', 'hanging')
-        //             .attr('fill', (d) => this.lineColorScale(d.location));
-        //     }
+                // draw text labels
+                this.lineChart.select('#overlay')
+                    .selectAll('text')
+                    .data(filteredData)
+                    .join('text')
+                    //.text(d => d.total_cases_per_million > 1000 ? `${d.location}, ${Math.round(d.total_cases_per_million / 1000)}k` : `${d.location}, ${Math.round(d.total_cases_per_million)}`)
+                    .text(d => `${d.location}, ${d3.format(".2s")(d.total_cases_per_million)}`)
+                    .attr('x', condition ? event.offsetX - 150 : event.offsetX + 20)
+                    .attr('y', (d, i) => 20 * i + 20)
+                    .attr('alignment-baseline', 'hanging')
+                    .attr('fill', (d) => this.lineColorScale(d.location));
+            }
 
-        // });
+        });
     }
 
 }

@@ -1,7 +1,7 @@
 - [x] title
 - [x] delete btn 
 - line
-  - [ ] y axis change
+  - [x] y axis change
   - [x] x axis ticket
   - [ ] hw line
   - [ ] color highlight and gray
@@ -13,6 +13,6 @@
   - [ ] label
   - [ ] data change
   - [ ] mouse click update line chart
-  - [ ] color change
+  - [x] color change
   - [ ] mouse move highlight
 - [ ] adjustment of layout size && position

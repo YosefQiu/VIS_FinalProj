@@ -103,7 +103,7 @@ class ChordChart {
             processData['VIE']
             ], {
             names: ['China', 'United States', 'Australia', 'Germany', 'Japan', 'Korea, Rep.', 'Malaysia', 'Singapore', 'Thailand', 'Vietnam'],
-            colors: ["#c4c4c4", "#69b40f", "#ec1d25", "#c8125c", "#008fc8", "#10218b", "#134b24", "#737373", "#c4134c", "#11714b"]
+            colors: ['#d98032', '#ef3e36', '#17bebb', '#237373', '#2e282a', '#5e4c43', '#8e705b', '#edb88b', '#f4c8b1', '#fad8d6']
         })
 
         this.names = this.data.names === undefined ? d3.range(this.data.length) : this.data.names
