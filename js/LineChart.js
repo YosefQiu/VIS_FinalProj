@@ -90,6 +90,11 @@ class LineChart {
 
         let groupedLocationData = d3.group(LineChartData, d => d.traders)
         this.lineColorScale = d3.scaleOrdinal(d3.schemeTableau10).domain(groupedLocationData.keys());
+        const tickLabels = [];
+
+        for (let i = 1992; i < 2020; i++) {
+            tickLabels.push(i);
+        }
 
         // Add x axis --> it is a date format
         const xAxis = d3.scaleLinear()
@@ -100,7 +105,7 @@ class LineChart {
         this.lineChart
             .select('#x-axis')
             .attr('transform', `translate(0, ${600 - this.padding.bottom})`)
-            .call(d3.axisBottom(xAxis))
+            .call(d3.axisBottom(xAxis).tickFormat((d,i) => tickLabels[i]))
 
         // y axis, linear float number
         const yAxis = d3.scaleLinear()

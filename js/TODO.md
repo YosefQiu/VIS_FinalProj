@@ -1,17 +1,18 @@
-- title
-- delete btn
+- [x] title
+- [x] delete btn 
 - line
-  - y axis change
-  - x axis ticket
-  - hw line
-  - color highlight and gray
-  - mouse click and move
+  - [ ] y axis change
+  - [x] x axis ticket
+  - [ ] hw line
+  - [ ] color highlight and gray
+  - [ ] mouse click and move
 - chord
-  - font size
-  - title
-  - pecentage gap
-  - label
-  - data change
-  - mouse click update line chart
-  - color change
-  - mouse move highlight
+  - [ ] font size
+  - [ ] title
+  - [ ] percentage gap
+  - [ ] label
+  - [ ] data change
+  - [ ] mouse click update line chart
+  - [ ] color change
+  - [ ] mouse move highlight
+- [ ] adjustment of layout size && position
