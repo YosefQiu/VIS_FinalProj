@@ -1,0 +1,17 @@
+- title
+- delete btn
+- line
+  - y axis change
+  - x axis ticket
+  - hw line
+  - color highlight and gray
+  - mouse click and move
+- chord
+  - font size
+  - title
+  - pecentage gap
+  - label
+  - data change
+  - mouse click update line chart
+  - color change
+  - mouse move highlight
