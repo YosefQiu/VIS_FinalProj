@@ -34,7 +34,8 @@ class LineChart {
                 
             })
         });
-
+        this.lineChartData = [...temp_data];
+        //console.log("con: ",temp_data);
         this.renderLineChart(temp_data);
         this.updateLineChart(temp_data);
     }
@@ -105,6 +106,7 @@ class LineChart {
     }
 
     renderLineChart(LineChartData) {
+        
         if (this.tradeType == "Export") {
             this.lineChart = this.lineChart.select('#Export')
             this.lineChart.attr("transform", `translate(${this.svg_w / 2},0)`);
@@ -138,9 +140,9 @@ class LineChart {
         
 
         let svg = d3.select('#lineCharts');
-
+        console.log("outside mousemove: ", LineChartData);
         svg.on('mousemove', (event) => {
-
+            console.log("inside mousemove: ", LineChartData);
             let bMouseExport = false;
             let bMouseImport = false;
 
@@ -154,8 +156,8 @@ class LineChart {
             }
             
             if (bMouseImport == true && bMouseExport == false) {
-                console.log('import');
-                console.log('event', event.offsetX, " ", event.offsetY);
+                //console.log('import');
+                //console.log('event', event.offsetX, " ", event.offsetY);
                 let current_svg_imp = d3.select('#lineCharts').select('#Import');
 
                 current_svg_imp.select('#overlay')
@@ -172,13 +174,14 @@ class LineChart {
             
                 // round date data 
                 const dateHovered = Math.floor(xAxis.invert(event.offsetX));
-                
+
+                console.log("data correct?:", this.lineChartData)
                 // sort data
-                let dataLookup = LineChartData;
+                let dataLookup = this.lineChartData;
                 let filteredData = [];
                 dataLookup.filter((row) => {parseFloat(row.year) == dateHovered; if(parseFloat(row.year) == dateHovered){filteredData.push(row);}});
                 filteredData.sort((rowA, rowB) => parseFloat(rowA.data) - parseFloat(rowB.data) > 0 ? -1 : 1);
-                console.log(filteredData);
+                
                
                 // flag to switch side
                 let condition = event.offsetX > 500 - this.padding.right;
@@ -198,7 +201,7 @@ class LineChart {
 
             
             }
-            if (bMouseExport == true && bMouseImport == false) {
+            else if (bMouseExport == true && bMouseImport == false) {
                 console.log('export');
                 console.log('event', event.offsetX, " ", event.offsetY);
 
@@ -227,7 +230,7 @@ class LineChart {
                
                 // flag to switch side
                 let condition = event.offsetX > 500 - this.padding.right;
-            
+                console.log("filter data:", dataLookup)
                 // draw text labels
                 current_svg_exp.select('#overlay')
                     .selectAll('text')
