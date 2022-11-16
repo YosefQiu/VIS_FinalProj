@@ -7,10 +7,9 @@
   - [ ] color highlight and gray
   - [ ] mouse click and move
 - chord
-  - [ ] font size
-  - [ ] title
-  - [ ] percentage gap
-  - [ ] label
+  - [X] font size
+  - [X] title
+  - [X] label
   - [ ] data change
   - [ ] mouse click update line chart
   - [x] color change

@@ -1,25 +1,3 @@
-
-
-// Promise.all([d3.csv('./dataset2.csv')]).then( data =>
-//     {
-//     // processing data here
-//     // ******* STATE MANAGEMENT *******
-//     // This should be all you need, but feel free to add to this if you need to 
-//     // communicate across the visualizations
-//     const globalApplicationState = {
-//         selectedCountry: null,
-//         selectedState:null, // importing or exporting
-//         selectedYear:null, // this should be initialized to the latest year
-//         importingChart: null, //chord chart
-//         exportingChart:null,// chord chart
-//         lineChart: null,
-//         data:null
-//     };
-
-//     console.log(globalApplicationState);
-//     });//background: #88b6f7;
-
-   
 function checkYear(num) {
     let baseStr = "year_";
     let baseYear = 1992 + num
