@@ -3,9 +3,10 @@
 - line
   - [x] y axis change
   - [x] x axis ticket
-  - [ ] hw line
+  - [x] hw line
   - [ ] color highlight and gray
   - [ ] mouse click and move
+    - [ ] bug: mouse can not get correct position
 - chord
   - [X] font size
   - [X] title

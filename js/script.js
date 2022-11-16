@@ -1,12 +1,3 @@
-function checkYear(num) {
-    let baseStr = "year_";
-    let baseYear = 1992 + num
-    return String(baseStr + String(baseYear));
-}    
-
-let aa = checkYear(0);
-console.log(aa);
-
 d3.csv('./ProcessedData/dataset2.csv')
     .then(dataOutput => {
         const dataResult = dataOutput.map((d) =>({
@@ -49,7 +40,7 @@ d3.csv('./ProcessedData/dataset2.csv')
         //console.log(dataResult);
 
         let line_chart_Import = new LineChart(dataResult, "Import","China");
-        let line_chart_Export = new LineChart(dataResult, "Export","China");
+        // let line_chart_Export = new LineChart(dataResult, "Export","China");
 
         let chord_Importchart = new ChordChart(dataResult, "Import", 2020);
         let chord_Exportchart = new ChordChart(dataResult, "Export", 2020);
