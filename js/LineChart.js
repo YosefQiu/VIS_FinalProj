@@ -15,7 +15,7 @@ class LineChart {
         this.svg_w = svg_w;
         this.svg_h = svg_h;
         this.bMouseMove = false;
-        this.bFlag = true;
+        this.country = country;
     
         this.originalData = data;
         let LineChartData = data.filter(v => v.country === country && v.tradeType === this.tradeType);
@@ -34,8 +34,7 @@ class LineChart {
                 
             })
         });
-        this.lineChartData = [...temp_data];
-        //console.log("con: ",temp_data);
+
         this.renderLineChart(temp_data);
         this.updateLineChart(temp_data);
     }
@@ -106,7 +105,6 @@ class LineChart {
     }
 
     renderLineChart(LineChartData) {
-        
         if (this.tradeType == "Export") {
             this.lineChart = this.lineChart.select('#Export')
             this.lineChart.attr("transform", `translate(${this.svg_w / 2},0)`);
@@ -136,28 +134,58 @@ class LineChart {
         // interative section
         this.lineChart.select('#overlay').append('line')
             .style("stroke", "lightgreen").style("stroke-width", 10);
-            // .attr('x1', 200).attr('y1', 0).attr('x2', 200).attr('y2', 500);
         
 
         let svg = d3.select('#lineCharts');
-        console.log("outside mousemove: ", LineChartData);
+
         svg.on('mousemove', (event) => {
-            console.log("inside mousemove: ", LineChartData);
+
             let bMouseExport = false;
             let bMouseImport = false;
 
 
             if (event.offsetX > this.padding.left && event.offsetX < 700 - this.padding.right) {
                 bMouseImport = true;
+                let tmpData = this.originalData.filter(v => v.country === this.country && v.tradeType === "Import");
+                let temp_data=[]
+                tmpData.forEach(element => {
+                    element.TradeData.forEach((data,i)=>{
+                        let year = String(i+1992)
+                        let temp={
+                            country: element.country,
+                            traders: element.traders,
+                            tradeType: element.tradeType,
+                            year: year,
+                            data: data
+                        }
+                        temp_data.push(temp)
+                    })
+                });
+                LineChartData = temp_data;
+
             }
 
             if (event.offsetX > (this.padding.left + this.svg_w / 2) && event.offsetX < this.svg_w - this.padding.right - 50) {
                 bMouseExport = true;
+                let tmpData = this.originalData.filter(v => v.country === this.country && v.tradeType === "Export");
+                let temp_data=[]
+                tmpData.forEach(element => {
+                    element.TradeData.forEach((data,i)=>{
+                        let year = String(i+1992)
+                        let temp={
+                            country: element.country,
+                            traders: element.traders,
+                            tradeType: element.tradeType,
+                            year: year,
+                            data: data
+                        }
+                        temp_data.push(temp)
+                    })
+                });
+                LineChartData = temp_data;
             }
             
             if (bMouseImport == true && bMouseExport == false) {
-                //console.log('import');
-                //console.log('event', event.offsetX, " ", event.offsetY);
                 let current_svg_imp = d3.select('#lineCharts').select('#Import');
 
                 current_svg_imp.select('#overlay')
@@ -174,14 +202,12 @@ class LineChart {
             
                 // round date data 
                 const dateHovered = Math.floor(xAxis.invert(event.offsetX));
-
-                console.log("data correct?:", this.lineChartData)
+                
                 // sort data
-                let dataLookup = this.lineChartData;
+                let dataLookup = LineChartData;
                 let filteredData = [];
                 dataLookup.filter((row) => {parseFloat(row.year) == dateHovered; if(parseFloat(row.year) == dateHovered){filteredData.push(row);}});
                 filteredData.sort((rowA, rowB) => parseFloat(rowA.data) - parseFloat(rowB.data) > 0 ? -1 : 1);
-                
                
                 // flag to switch side
                 let condition = event.offsetX > 500 - this.padding.right;
@@ -201,9 +227,7 @@ class LineChart {
 
             
             }
-            else if (bMouseExport == true && bMouseImport == false) {
-                console.log('export');
-                console.log('event', event.offsetX, " ", event.offsetY);
+            if (bMouseExport == true && bMouseImport == false) {
 
                 let current_svg_exp = d3.select('#lineCharts').select('#Export');
                 current_svg_exp.select('#overlay')
@@ -219,71 +243,59 @@ class LineChart {
                 const yAxis = this.yAxis;
             
                 // round date data 
-                const dateHovered = Math.floor(xAxis.invert(event.offsetX));
+                const dateHovered = Math.floor(xAxis.invert(event.offsetX - this.svg_w / 2));
                 
                 // sort data
                 let dataLookup = LineChartData;
                 let filteredData = [];
                 dataLookup.filter((row) => {parseFloat(row.year) == dateHovered; if(parseFloat(row.year) == dateHovered){filteredData.push(row);}});
                 filteredData.sort((rowA, rowB) => parseFloat(rowA.data) - parseFloat(rowB.data) > 0 ? -1 : 1);
-                
                
                 // flag to switch side
-                let condition = event.offsetX > 500 - this.padding.right;
-                console.log("filter data:", dataLookup)
+                let condition = event.offsetX > 1200 - this.padding.right;
+            
                 // draw text labels
                 current_svg_exp.select('#overlay')
                     .selectAll('text')
                     .data(filteredData)
                     .join('text')
                     .text(d => `${d.traders}, ${d3.format(".2s")(parseFloat(d.data))}`)
-                    .attr('x', condition ? event.offsetX - 170: event.offsetX + 20)
+                    .attr('x', condition ? event.offsetX - 170 - this.svg_w / 2: event.offsetX + 20 - this.svg_w / 2)
                     .attr('y', (d, i) => 20 * i + 20)
                     .attr('alignment-baseline', 'hanging')
                     .style('opacity', 1)
                     .attr('fill', (d) => this.lineColorScale(d.traders));
                 
-
             }
 
+            if (bMouseImport == false && bMouseExport == true) {
+                let current_svg = d3.select('#lineCharts').select('#Import').select('#overlay');
+                current_svg.selectAll('line').style('opacity', 0);
+                current_svg.selectAll('text').style('opacity', 0);
+            }
+            if (bMouseImport == true && bMouseExport == false) {
+                let current_svg = d3.select('#lineCharts').select('#Export').select('#overlay');
+                current_svg.selectAll('line').style('opacity', 0);
+                current_svg.selectAll('text').style('opacity', 0);
+            }
+            if (bMouseImport == false && bMouseExport == false) {
+                let current_svg = d3.select('#lineCharts').select('#Export').select('#overlay');
+                current_svg.selectAll('line').style('opacity', 0);
+                current_svg.selectAll('text').style('opacity', 0);
+
+                current_svg = d3.select('#lineCharts').select('#Import').select('#overlay');
+                current_svg.selectAll('line').style('opacity', 0);
+                current_svg.selectAll('text').style('opacity', 0);
+            }
            
         });
         
     }
 
     updateLineChart(country) {
-        console.log(country);
-    }
+            console.log(country);
+        }
+
 
 }
 
-// {
-    // const xAxis = this.xAxis;
-    // const yAxis = this.yAxis;
-
-    // // round date data 
-    // const dateHovered = Math.floor(xAxis.invert(event.offsetX));
-    
-    // // sort data
-    // let dataLookup = LineChartData;
-    // let filteredData = [];
-    // dataLookup.filter((row) => {parseFloat(row.year) == dateHovered; if(parseFloat(row.year) == dateHovered){filteredData.push(row);}});
-    // filteredData.sort((rowA, rowB) => parseFloat(rowA.data) - parseFloat(rowB.data) > 0 ? -1 : 1);
-    
-   
-    // // flag to switch side
-    // let condition = event.offsetX > 500 - this.padding.right;
-
-    // // draw text labels
-    // this.lineChart.select('#overlay')
-    //     .selectAll('text')
-    //     .data(filteredData)
-    //     .join('text')
-    //     .text(d => `${d.traders}, ${d3.format(".2s")(parseFloat(d.data))}`)
-    //     .attr('x', condition ? event.offsetX - 170  - this.svg_w / 2: event.offsetX + 20 - this.svg_w / 2)
-    //     .attr('y', (d, i) => 20 * i + 20)
-    //     .attr('alignment-baseline', 'hanging')
-    //     .style('opacity', 1)
-    //     .attr('fill', (d) => this.lineColorScale(d.traders));
-    
-// }
