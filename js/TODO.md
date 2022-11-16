@@ -5,8 +5,8 @@
   - [x] x axis ticket
   - [x] hw line
   - [ ] color highlight and gray
-  - [ ] mouse click and move
-    - [ ] bug: mouse can not get correct position
+  - [x] mouse click and move
+    - [x] bug: mouse can not get correct position
 - chord
   - [X] font size
   - [X] title
@@ -14,5 +14,5 @@
   - [ ] data change
   - [ ] mouse click update line chart
   - [x] color change
-  - [ ] mouse move highlight
-- [ ] adjustment of layout size && position
+  - [x] mouse move highlight
+- [x] adjustment of layout size && position

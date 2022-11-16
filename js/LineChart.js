@@ -22,6 +22,7 @@ class LineChart {
         let temp_data=[]
         LineChartData.forEach(element => {
             element.TradeData.forEach((data,i)=>{
+                data = data || 0
                 let year = String(i+1992)
                 let temp={
                     country: element.country,
@@ -36,7 +37,7 @@ class LineChart {
         });
 
         this.renderLineChart(temp_data);
-        this.updateLineChart(temp_data);
+        // this.updateLineChart(temp_data);
     }
     
 
@@ -96,8 +97,14 @@ class LineChart {
             .data(data)
             .join('path')
             .attr('fill', 'none')
-            .attr('stroke', ([group, values]) => this.lineColorScale(values[0].traders))
+            .attr('stroke', 'black')
+            .attr('stroke-width', 10)
+            .style("opacity", 0)
+            .transition()
+            .duration(6000)
+            .style("opacity", 1)
             .attr('stroke-width', 1)
+            .attr('stroke', ([group, values]) => this.lineColorScale(values[0].traders))
             .attr('d', ([group, values]) => d3.line()
                 .x((d,i) =>xAxis(parseInt(d.year)))
                 .y((d) => (d3.format(".2s")(yAxis(parseFloat(d.data)))))
@@ -135,7 +142,6 @@ class LineChart {
         this.lineChart.select('#overlay').append('line')
             .style("stroke", "lightgreen").style("stroke-width", 10);
         
-
         let svg = d3.select('#lineCharts');
 
         svg.on('mousemove', (event) => {
@@ -150,6 +156,7 @@ class LineChart {
                 let temp_data=[]
                 tmpData.forEach(element => {
                     element.TradeData.forEach((data,i)=>{
+                        data = data || 0
                         let year = String(i+1992)
                         let temp={
                             country: element.country,
@@ -171,6 +178,7 @@ class LineChart {
                 let temp_data=[]
                 tmpData.forEach(element => {
                     element.TradeData.forEach((data,i)=>{
+                        data = data || 0
                         let year = String(i+1992)
                         let temp={
                             country: element.country,
@@ -287,13 +295,97 @@ class LineChart {
                 current_svg.selectAll('line').style('opacity', 0);
                 current_svg.selectAll('text').style('opacity', 0);
             }
+
+        
            
         });
+        svg.on('click', (event, d, i) => {
+            console.log('evnet', event);
+            console.log('d', d);
+            console.log('i', i);
+            console.log(event.target);
+        })
         
     }
 
     updateLineChart(country) {
-            console.log(country);
+            let country_name = country;
+
+            this.lineChart = d3.select('#lineCharts')
+            
+            this.padding = { left: 80, bottom: 150, right: 50 }
+    
+            let svg_w = this.lineChart.attr('width');
+            let svg_h = this.lineChart.attr('height');
+            this.svg_w = svg_w;
+            this.svg_h = svg_h;
+            this.bMouseMove = false;
+            this.country = country_name;
+        
+            let current_svg = d3.select('#lineCharts').select('#Import');
+            current_svg.selectAll('text').remove();
+            current_svg.select('#lines').selectAll('path').remove();
+            current_svg.select('#x-axis').remove();
+            current_svg.append('g').attr('id', 'x-axis');
+            current_svg.select('#y-axis').remove();
+            current_svg.append('g').attr('id', 'y-axis');
+            let current_svg_overlay = current_svg.select('#overlay');
+            current_svg_overlay.selectAll('line').remove();
+            current_svg_overlay.selectAll('text').remove();
+
+            current_svg = d3.select('#lineCharts').select('#Export');
+            current_svg.selectAll('text').remove();
+            current_svg.select('#lines').selectAll('path').remove();
+            current_svg.select('#x-axis').remove();
+            current_svg.append('g').attr('id', 'x-axis');
+            current_svg.select('#y-axis').remove();
+            current_svg.append('g').attr('id', 'y-axis');
+            current_svg_overlay = current_svg.select('#overlay');
+            current_svg_overlay.selectAll('line').remove();
+            current_svg_overlay.selectAll('text').remove();
+
+            let type = ["Import", "Export"];
+            this.tradeType = type[0];
+            let LineChartData = this.originalData.filter(v => v.country === country_name && v.tradeType === this.tradeType);
+            let temp_data=[]
+            LineChartData.forEach(element => {
+                element.TradeData.forEach((data,i)=>{
+                    data = data || 0
+                    let year = String(i+1992)
+                    let temp={
+                        country: element.country,
+                        traders: element.traders,
+                        tradeType: element.tradeType,
+                        year: year,
+                        data: data
+                    }
+                    temp_data.push(temp)   
+                })
+            });
+            this.renderLineChart(temp_data);
+            
+            this.tradeType = type[1];
+            this.lineChart = d3.select('#lineCharts');
+            LineChartData = this.originalData.filter(v => v.country === country_name && v.tradeType === this.tradeType);
+            temp_data=[]
+            LineChartData.forEach(element => {
+                element.TradeData.forEach((data,i)=>{
+                    data = data || 0
+                    let year = String(i+1992)
+                    let temp={
+                        country: element.country,
+                        traders: element.traders,
+                        tradeType: element.tradeType,
+                        year: year,
+                        data: data
+                    }
+                    temp_data.push(temp)   
+                })
+            });
+            this.renderLineChart(temp_data);
+
+            
+
         }
 
 
