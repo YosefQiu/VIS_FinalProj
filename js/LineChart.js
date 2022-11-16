@@ -198,7 +198,8 @@ class LineChart {
             console.log('mouse click');})
     }
 
-    updateLineChart(LineChartData) {
+    updateLineChart(country) {
+        console.log(country);
     }
 
 }

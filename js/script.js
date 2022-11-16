@@ -1,3 +1,11 @@
+
+const globalApplicationState = {
+    ImportChord: null,
+    ExportChord: null,
+    ImportLine: null,
+    ExportLine: null,
+};
+
 d3.csv('./ProcessedData/dataset2.csv')
     .then(dataOutput => {
         const dataResult = dataOutput.map((d) =>({
@@ -44,6 +52,11 @@ d3.csv('./ProcessedData/dataset2.csv')
 
         let chord_Importchart = new ChordChart(dataResult, "Import", 2020);
         let chord_Exportchart = new ChordChart(dataResult, "Export", 2020);
+
+        globalApplicationState.ImportLine = line_chart_Import;
+        //globalApplicationState.ExportLine = line_chart_Export;
+        globalApplicationState.chord_Importchart = chord_Importchart;
+        globalApplicationState.chord_Exportchart = chord_Exportchart;
     });
 
 

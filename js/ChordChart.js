@@ -20,7 +20,7 @@ class ChordChart {
         let countries = [];
         for (let i = 0; i < this.originalData.length; i++)
             countries.push(this.originalData[i].country);  
-        this.year = year-1992
+        this.year = year
         let temp = [];
         let processData = { CHN: [], USA: [], AUS: [], GER: [], JAP: [], KOR: [], MAL: [], SIN: [], THA: [], VIE: [] };
         countries = unique(countries);
@@ -58,7 +58,7 @@ class ChordChart {
                     if (this.originalData[i].tradeType == this.TradeType) {
                         for (let j = 0; j < countries.length; j++) {
                             if (this.originalData[i].traders == countries[j]) {
-                                temp.push(this.originalData[i].TradeData[this.year]);
+                                temp.push(this.originalData[i].TradeData[this.year-1992]);
                             }
                         }
                     }
@@ -117,7 +117,8 @@ class ChordChart {
             .padAngle(1 / innerRadius)
 
         this.color = d3.scaleOrdinal(this.names, this.colors)
-    }
+    } 
+
     // this will be called in script.js 
     // when the year changes
     updateChart(year) {
@@ -135,10 +136,12 @@ class ChordChart {
 
         svg.append("g")
             .attr("id", "title");
+
+       
         svg.select("#title")
             .append("text")
             .attr("font-size", 20)
-            .text("Importing Data For year 2022")
+            .text(`${this.TradeType} Data For year ${this.year}`)
             .attr("transform", ` translate(${- this.vizWidth *0.3125}, ${- this.vizWidth * 0.4375})`);
 
         const chords = this.chord(this.data);
@@ -150,10 +153,7 @@ class ChordChart {
             .data(chords.groups)
             .join("g");
 
-        // fill inside
-        group.append("path")
-            .attr("fill", d => this.color(this.names[d.index]))
-            .attr("d", this.arc);
+        
 
         
        
@@ -161,13 +161,23 @@ class ChordChart {
         let names = this.names
           
         svg.append("g")
-            .attr("fill-opacity", 0.8)
+            .attr("id", "belts")
+            .attr("class","default")
+            .attr("fill-opacity", 0.25)
             .selectAll("path")
             .data(chords)
             .join("path")
             .style("mix-blend-mode", "multiply")
             .attr("fill", d => this.color(names[d.source.index]))
             .attr("d", this.ribbon)
+            .on("mouseover", (d, i) => {
+                d3.select("#belts").attr("fill-opacity", 0.25);
+                d.target.setAttribute("fill-opacity", 1)
+                console.log()
+            })
+            .on("mouseout", (d, i) => {
+                d.target.setAttribute("fill-opacity", 0.25)
+            })
             .append("title")
             .text(d => `${this.formatValue(d.source.value)} 
             ${names[d.target.index]} → ${names[d.source.index]}
@@ -175,6 +185,23 @@ class ChordChart {
             ${this.formatValue(d.target.value)} 
             ${names[d.source.index]} → ${names[d.target.index]}`}`);
 
+        // fill inside
+        group.append("path")
+            .attr("id", "arcs")
+            .attr("fill", d => this.color(this.names[d.index]))
+            .attr("d", this.arc)
+            .on("mouseover", (d, i) => {
+                d3.select("#arcs").attr("fill-opacity", 0.25);
+                d.target.setAttribute("fill-opacity", 1)
+
+                // if a country arc is selected, the chord chart should show all the belts related to this country
+                // by filtering the country color
+                //d3.select("#belts").selectAll("path").filter((o, index) => { console.log(o, index); return o.getAttribute("fill") === d.target.getAttribute("fill") })
+                //console.log(this.names[i.index]);
+            })
+            .on("click", (d, i) => {
+                globalApplicationState.ImportLine.updateLineChart(names[i.index]);
+            })
 
         // country name
 
@@ -187,11 +214,15 @@ class ChordChart {
         
         group.append("text")
             .append("textPath")
+            .attr("id", "countryNameText")
             .attr("stroke", d => this.color(names[d.index]))
             .attr("xlink:href", "#countryName") 
             .style("text-anchor", "middle")
             .attr("startOffset", d => (d.startAngle + d.endAngle)/2 * outerRadius)
             .text(d => `${this.names[d.index]}`)
+            .on("mouseover", (d, i) => {
+                //console.log(this.names[i.index]);
+            })
 }
 
 
