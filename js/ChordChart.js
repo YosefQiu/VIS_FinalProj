@@ -1,4 +1,5 @@
-
+var call_names;
+var that;
 class ChordChart {
     /**
      * Creates a bubble chart Object
@@ -8,12 +9,25 @@ class ChordChart {
     // chord chart takes array of 10*10 as input
     constructor(data,Tradetype,year) {
         this.originalData = data
-        this.vizWidth = 400;
-        this.vizHeight = 400;
+        this.chordChart = d3.select("#chordCharts");
+        let svg_w = this.chordChart.attr('width');
+        let svg_h = this.chordChart.attr('height');
+        this.svg_w = svg_w;
+        this.svg_h = svg_h;
+        this.vizWidth = svg_w;
+        this.vizHeight = svg_h;
+
+        this.bLineChartInit = false;
+        this.bFirstZoom = true;
+        this.bFirstIn = true;
+
+        this.vizWidth = 500;
+        this.vizHeight = 500;
         this.TradeType = Tradetype;
         this.year = year;
         this.updateChart(this.year)
         
+
     }
     
     updateData(year) {
@@ -127,10 +141,10 @@ class ChordChart {
         d3.select("#chordCharts").attr("viewBox", [-this.vizWidth / 2, -this.vizWidth / 2, this.vizWidth, this.vizWidth])
         let svg;
         if (this.TradeType == "Import") {
-            svg = d3.select("#Import").attr("transform", `translate(-200,0)`);
+            svg = d3.select("#Import").attr("transform", `scale(1.15)translate(-200,0)`);
         }
         else {
-            svg = d3.select("#Export").attr("transform", `translate(200,0)`);
+            svg = d3.select("#Export").attr("transform", `scale(1.15)translate(200,0)`);
         }
 
 
@@ -200,7 +214,34 @@ class ChordChart {
                 //console.log(this.names[i.index]);
             })
             .on("click", (d, i) => {
-                globalApplicationState.ImportLine.updateLineChart(names[i.index]);
+                console.log('new zoomm', this.bFirstZoom);
+                if (this.bFirstZoom == true) {
+                    d3.select("#Import")
+                    .transition()
+                    .duration(3000)
+                    .attr("transform", `scale(5.0)translate(-200,0)`)
+                    .transition()
+                    .duration(3000)
+                    .attr("transform", `scale(1.0)translate(-200,0)`);
+                    d3.select("#Export")
+                    .transition()
+                    .duration(3000)
+                    .attr("transform", `scale(5.0)translate(250,0)`)
+                    .transition()
+                    .duration(3000)
+                    .attr("transform", `scale(1.0)translate(250,0)`).on("end",this.myCallback);
+                    // this.bFirstZoom = false;
+                }
+                call_names = names[i.index];
+                that = this;
+                
+                if (this.bFirstZoom == false) {
+                    if (this.bLineChartInit == false) {this.initLineChartSvg();}
+                    globalApplicationState.ImportLine = new LineChart(this.originalData, "Import",names[i.index]);
+                    globalApplicationState.ImportLine = new LineChart(this.originalData, "Export",names[i.index]);
+                    globalApplicationState.ImportLine.updateLineChart(names[i.index]);
+                }
+                this.bFirstZoom = false;
             })
 
         // country name
@@ -225,5 +266,34 @@ class ChordChart {
             })
 }
 
+    initLineChartSvg() {
+        let svg = d3.select('.charts').append('svg').attr('id', 'lineCharts')
+            .attr("width", 1500).attr("height", 600);
+        let svg_import = svg.append('g').attr('id', "Import");
+        svg_import.append('g').attr('id', "lines");
+        svg_import.append('g').attr('id', "overlay");
+        svg_import.append('g').attr('id', "x-axis");
+        svg_import.append('g').attr('id', "y-axis");
+        let svg_export = svg.append('g').attr('id', "Export");
+        svg_export.append('g').attr('id', "lines");
+        svg_export.append('g').attr('id', "overlay");
+        svg_export.append('g').attr('id', "x-axis");
+        svg_export.append('g').attr('id', "y-axis");
+
+        this.bLineChartInit = true;
+        console.log('init finish========');
+    }
+
+    myCallback() {
+        console.log('call back');
+        console.log(call_names);
+        this.bFirstZoom = false;
+        console.log("zoom", this.bFirstZoom);
+        that.initLineChartSvg();
+        globalApplicationState.ImportLine = new LineChart(that.originalData, "Import",call_names);
+        globalApplicationState.ImportLine = new LineChart(that.originalData, "Export",call_names);
+        globalApplicationState.ImportLine.updateLineChart(call_names);
+        
+    }
 
 }

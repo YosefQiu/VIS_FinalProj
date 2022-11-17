@@ -6,6 +6,8 @@ class LineChart {
     constructor(data,tradeType,country) {
         // Set some class level variables
         this.tradeType = tradeType
+
+        
         this.lineChart = d3.select('#lineCharts')
         
         this.padding = { left: 80, bottom: 150, right: 50 }
@@ -40,9 +42,6 @@ class LineChart {
         // this.updateLineChart(temp_data);
     }
     
-
-   
-
     renderAxisLabel(svg) {
         // x axis text
         svg
@@ -102,6 +101,7 @@ class LineChart {
             .style("opacity", 0)
             .transition()
             .duration(6000)
+            .ease(d3.easeLinear)
             .style("opacity", 1)
             .attr('stroke-width', 1)
             .attr('stroke', ([group, values]) => this.lineColorScale(values[0].traders))

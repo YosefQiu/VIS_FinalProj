@@ -4,7 +4,8 @@
   - [x] y axis change
   - [x] x axis ticket
   - [x] hw line
-  - [ ] color highlight and gray
+  - [x] color highlight and gray
+  - [x] animation
   - [x] mouse click and move
     - [x] bug: mouse can not get correct position
 - chord

@@ -43,18 +43,21 @@ d3.csv('./ProcessedData/dataset2.csv')
             parseFloat(d.year_2019),
             parseFloat(d.year_2020)],
             year_length: parseInt(2020 - 1992 + 1)
-        }));
+        }));    
 
-        //console.log(dataResult);
-
-        let line_chart_Import = new LineChart(dataResult, "Export","China");
-        let line_chart_Export = new LineChart(dataResult, "Import","China");
+        let line_chart_Import = null;
+        let line_chart_Export = null;
 
         let chord_Importchart = new ChordChart(dataResult, "Import", 2020);
         let chord_Exportchart = new ChordChart(dataResult, "Export", 2020);
 
+
+
+        // let line_chart_Import = new LineChart(dataResult, "Export","China");
+        // let line_chart_Export = new LineChart(dataResult, "Import","China");
+
         globalApplicationState.ImportLine = line_chart_Import;
-        //globalApplicationState.ExportLine = line_chart_Export;
+        globalApplicationState.ExportLine = line_chart_Export;
         globalApplicationState.chord_Importchart = chord_Importchart;
         globalApplicationState.chord_Exportchart = chord_Exportchart;
     });
