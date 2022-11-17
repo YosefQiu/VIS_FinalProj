@@ -7,6 +7,7 @@
   - [x] color highlight and gray
   - [x] animation
   - [x] mouse click and move
+  - [ ] test green line
     - [x] bug: mouse can not get correct position
 - chord
   - [X] font size
@@ -16,4 +17,9 @@
   - [ ] mouse click update line chart
   - [x] color change
   - [x] mouse move highlight
-- [x] adjustment of layout size && position
+- [ ] adjustment of layout size && position
+- [ ] tool tips
+- [ ] context
+- [ ] tool bar (copy)
+- [ ] down tool bar
+- [ ] background img
