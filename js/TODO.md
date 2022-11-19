@@ -20,6 +20,13 @@
 - [ ] adjustment of layout size && position
 - [ ] tool tips
 - [ ] context
-- [ ] tool bar (copy)
-- [ ] down tool bar
-- [ ] background img
+- [x] tool bar (copy)
+- [x] down tool bar
+- [x] background img
+ 
+
+新的布局测试叫做 layout.html 如果重命名需要更改
+- [ ] aboutPage.html 里的home page btn
+- [ ] layout.html 里的home page btn
+
+先保留背景颜色，方便检测布局是否正确

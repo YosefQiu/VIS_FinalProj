@@ -8,14 +8,22 @@ class ChordChart {
     // https://observablehq.com/@d3/chord-diagram
     // chord chart takes array of 10*10 as input
     constructor(data,Tradetype,year) {
+
+
+
         this.originalData = data
         this.chordChart = d3.select("#chordCharts");
-        let svg_w = this.chordChart.attr('width');
-        let svg_h = this.chordChart.attr('height');
+
+        // let view = d3.select('#view1').attr('width', 1500).attr('height',  800);
+        
+        let svg_w = this.chordChart.attr('width', '100%');
+        let svg_h = this.chordChart.attr('height', '80%');
         this.svg_w = svg_w;
         this.svg_h = svg_h;
         this.vizWidth = svg_w;
         this.vizHeight = svg_h;
+
+        // console.log(w, h, svg_w, svg_h);
 
         this.bLineChartInit = false;
         this.bFirstZoom = true;
@@ -267,8 +275,12 @@ class ChordChart {
 }
 
     initLineChartSvg() {
-        let svg = d3.select('.charts').append('svg').attr('id', 'lineCharts')
-            .attr("width", 1500).attr("height", 600);
+
+        // document.getElementById('pre_view2').classList.add('view2')
+        // let view2 = d3.select('id', "#pre_view2");
+
+        let svg = d3.select('#lineCharts')
+            .attr("width", '100%').attr("height", '80%');
         let svg_import = svg.append('g').attr('id', "Import");
         svg_import.append('g').attr('id', "lines");
         svg_import.append('g').attr('id', "overlay");
@@ -280,6 +292,8 @@ class ChordChart {
         svg_export.append('g').attr('id', "x-axis");
         svg_export.append('g').attr('id', "y-axis");
 
+        document.getElementById('id_aside').classList.remove('aside_before');
+        document.getElementById('id_aside').classList.add('aside_after');
         this.bLineChartInit = true;
         console.log('init finish========');
     }
