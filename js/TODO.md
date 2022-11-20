@@ -1,3 +1,5 @@
+## TODO list after the milestone
+----
 - [x] title
 - [x] delete btn 
 - line
@@ -7,7 +9,7 @@
   - [x] color highlight and gray
   - [x] animation
   - [x] mouse click and move
-  - [ ] test green line
+  - [x] test green line
     - [x] bug: mouse can not get correct position
 - chord
   - [X] font size
@@ -19,14 +21,24 @@
   - [x] mouse move highlight
 - [ ] adjustment of layout size && position
 - [ ] tool tips
-- [ ] context
-- [x] tool bar (copy)
+- [ ] content
+  - [ ] add some content in the aside part
+  - [ ] add some content in the blank area above the linechart 
+- [x] tool bar
 - [x] down tool bar
 - [x] background img
  
 
-新的布局测试叫做 layout.html 如果重命名需要更改
-- [ ] aboutPage.html 里的home page btn
-- [ ] layout.html 里的home page btn
 
-先保留背景颜色，方便检测布局是否正确
+
+-----
+**what i change**
+1. new **index.html** called **layout.html**, complete the following before rename.
+   - [ ] **home page btn** in the **aboutPage.html**
+   - [ ] **home page btn** in the **layout.html**
+   - [ ] change **layout.html** to **index.html** && delete orginal **index.html**
+   - [ ] keep the background color first to check whether the layout is correct
+
+2. delete the ```html <div class="charts">```  in class view1 && class view2 
+   - solves the bug of svg and the blank area below in the those view
+3. change the scale and translate in chordchart 

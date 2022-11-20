@@ -6,6 +6,16 @@ const globalApplicationState = {
     ExportLine: null,
 };
 
+let bChordChartLine = true;
+let bShowLine = true;
+
+let line_chart_Import = null;
+let line_chart_Export = null;
+
+let chord_Importchart = null;
+let chord_Exportchart = null;
+
+
 d3.csv('./ProcessedData/dataset2.csv')
     .then(dataOutput => {
         const dataResult = dataOutput.map((d) =>({
@@ -45,16 +55,12 @@ d3.csv('./ProcessedData/dataset2.csv')
             year_length: parseInt(2020 - 1992 + 1)
         }));    
 
-        let line_chart_Import = null;
-        let line_chart_Export = null;
+        line_chart_Import = null;
+        line_chart_Export = null;
 
-        let chord_Importchart = new ChordChart(dataResult, "Import", 2020);
-        let chord_Exportchart = new ChordChart(dataResult, "Export", 2020);
+        chord_Importchart = new ChordChart(dataResult, "Import", 2020);
+        chord_Exportchart = new ChordChart(dataResult, "Export", 2020);
 
-
-
-        // let line_chart_Import = new LineChart(dataResult, "Export","China");
-        // let line_chart_Export = new LineChart(dataResult, "Import","China");
 
         globalApplicationState.ImportLine = line_chart_Import;
         globalApplicationState.ExportLine = line_chart_Export;
@@ -74,3 +80,10 @@ d3.csv('./ProcessedData/dataset2.csv')
               page_tt_label.innerHTML = val;
            }                           
        }
+
+    document.getElementById('showLine_btn').onclick = function() {
+        console.log('btn down');
+        bShowLine = !bShowLine;
+        console.log(bShowLine);
+        chord_Exportchart.lineTest();
+    }

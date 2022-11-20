@@ -16,14 +16,20 @@ class ChordChart {
 
         // let view = d3.select('#view1').attr('width', 1500).attr('height',  800);
         
-        let svg_w = this.chordChart.attr('width', '100%');
-        let svg_h = this.chordChart.attr('height', '80%');
+        this.chordChart.attr('width', '100%');
+        this.chordChart.attr('height', '100%');
+        let svg_w = this.chordChart.attr('width');
+        let svg_h = this.chordChart.attr('height');
+
+        svg_w = document.getElementById("chordCharts").clientWidth;
+        svg_h = document.getElementById("chordCharts").clientHeight;
+
+
         this.svg_w = svg_w;
         this.svg_h = svg_h;
-        this.vizWidth = svg_w;
-        this.vizHeight = svg_h;
+        this.vizWidth = svg_w / 2;
+        this.vizHeight = svg_h / 2;
 
-        // console.log(w, h, svg_w, svg_h);
 
         this.bLineChartInit = false;
         this.bFirstZoom = true;
@@ -33,7 +39,9 @@ class ChordChart {
         this.vizHeight = 500;
         this.TradeType = Tradetype;
         this.year = year;
+        this.lineTest();
         this.updateChart(this.year)
+        
         
 
     }
@@ -149,10 +157,10 @@ class ChordChart {
         d3.select("#chordCharts").attr("viewBox", [-this.vizWidth / 2, -this.vizWidth / 2, this.vizWidth, this.vizWidth])
         let svg;
         if (this.TradeType == "Import") {
-            svg = d3.select("#Import").attr("transform", `scale(1.15)translate(-200,0)`);
+            svg = d3.select("#Import").attr("transform", `scale(0.90)translate(-195,0)`);
         }
         else {
-            svg = d3.select("#Export").attr("transform", `scale(1.15)translate(200,0)`);
+            svg = d3.select("#Export").attr("transform", `scale(0.90)translate(205,0)`);
         }
 
 
@@ -230,14 +238,14 @@ class ChordChart {
                     .attr("transform", `scale(5.0)translate(-200,0)`)
                     .transition()
                     .duration(3000)
-                    .attr("transform", `scale(1.0)translate(-200,0)`);
+                    .attr("transform", `scale(0.90)translate(-200,0)`);
                     d3.select("#Export")
                     .transition()
                     .duration(3000)
-                    .attr("transform", `scale(5.0)translate(250,0)`)
+                    .attr("transform", `scale(5.0)translate(220,0)`)
                     .transition()
                     .duration(3000)
-                    .attr("transform", `scale(1.0)translate(250,0)`).on("end",this.myCallback);
+                    .attr("transform", `scale(0.90)translate(220,0)`).on("end",this.myCallback);
                     // this.bFirstZoom = false;
                 }
                 call_names = names[i.index];
@@ -276,11 +284,12 @@ class ChordChart {
 
     initLineChartSvg() {
 
-        // document.getElementById('pre_view2').classList.add('view2')
-        // let view2 = d3.select('id', "#pre_view2");
+        let view2 = document.getElementById('pre_view2');
+        view2.classList.add('view2');
+        
+        let svg = d3.select('#pre_view2').append('svg');
+        svg.attr('id', 'lineCharts').attr("width", '100%').attr("height", '100%');
 
-        let svg = d3.select('#lineCharts')
-            .attr("width", '100%').attr("height", '80%');
         let svg_import = svg.append('g').attr('id', "Import");
         svg_import.append('g').attr('id', "lines");
         svg_import.append('g').attr('id', "overlay");
@@ -310,5 +319,36 @@ class ChordChart {
         globalApplicationState.ImportLine.updateLineChart(call_names);
         
     }
+
+    lineTest() {
+        let svg_w = document.getElementById("chordCharts").clientWidth;
+        let svg_h = document.getElementById("chordCharts").clientHeight;
+
+        if (bShowLine) {
+            if (bChordChartLine == true) {
+            
+                console.log(svg_w, svg_h);
+    
+                let control_line = this.chordChart.select('#control_line').append('line').attr('x1', 0 ).attr('y1', -svg_h/2).attr('x2', 0).attr('y2', svg_h/2)
+                .style("stroke", "lightgreen").style("stroke-width", 10);
+                console.log('creat line');
+                bChordChartLine = false;
+            }
+            this.chordChart.on('mousemove', (event) =>{
+                let xpos = event.offsetX - svg_w / 2;
+                console.log(xpos);
+                this.chordChart.select('#control_line').select('line').attr('x1', xpos ).attr('y1', -svg_h/2).attr('x2', xpos).attr('y2', svg_h/2);
+                console.log('event', event.offsetX);
+            })
+        }
+        if (!bShowLine) {
+            this.chordChart.select('#control_line').select('line').remove();
+            bChordChartLine = true;
+
+        }
+        
+    }
+
+    
 
 }
