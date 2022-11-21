@@ -19,6 +19,7 @@
   - [ ] mouse click update line chart
   - [x] color change
   - [x] mouse move highlight
+  - [ ] opacity too low conclicts with the background
 - [ ] adjustment of layout size && position
 - [ ] tool tips
 - [ ] content
@@ -45,4 +46,9 @@
 4. add a dot chart
    - [ ] show when mouse mouve and compare btn down
    - [x] **bug** avg smaller than min ?
+   - [ ] hide and display
+   - [ ] change the line and circle color
+   - [ ] add countries name
 5. add a tool for content class
+6. add force bubble chart
+   - [ ] label

@@ -15,6 +15,9 @@ let line_chart_Export = null;
 let chord_Importchart = null;
 let chord_Exportchart = null;
 
+let dot_Importchart = null;
+let dot_Exportchart = null;
+
 let bDotImportchart = true;
 let bDotExportchart = true;
 
@@ -72,6 +75,7 @@ d3.csv('./ProcessedData/dataset2.csv')
         globalApplicationState.chord_Exportchart = chord_Exportchart;
     });
 
+    
 
     window.onload  = function(){
         let option = document.getElementById("option");
@@ -85,9 +89,9 @@ d3.csv('./ProcessedData/dataset2.csv')
            }                           
        }
 
+    let bubbleChart = new ForceBubbleChart();
+
     document.getElementById('showLine_btn').onclick = function() {
-        console.log('btn down');
         bShowLine = !bShowLine;
-        console.log(bShowLine);
-        chord_Exportchart.lineTest();
+        chord_Exportchart.sliderWnd();
     }
