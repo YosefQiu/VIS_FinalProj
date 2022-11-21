@@ -141,6 +141,9 @@ class DotChart {
         let vizWidth = this.vizWidth;
         let vizHeight = this.vizHeight;
         let yAxis = this.yAxis;
+
+        this.color = d3.scaleOrdinal(['#d98032', '#ef3e36', '#17bebb', '#237373', '#2e282a', '#5e4c43', '#8e705b', '#edb88b', '#f4c8b1', '#fad8d6']);
+
         if (this.tradeType == "Import") {
             // xPos = vizWidth / 20 * i + this.padding.left + 40
         for (let i = 0; i < 10; i++) {
@@ -149,7 +152,7 @@ class DotChart {
             .attr('y1', yAxis(this.DotChartData[this.findCountries[this.countries[i]]][1]))
             .attr('x2', vizWidth / 20 * i + this.padding.left  + 40)
             .attr('y2', yAxis(this.DotChartData[this.findCountries[this.countries[i]]][0]))
-            .style("stroke", "blue").style("stroke-width", 6);
+            .style("stroke", this.color(this.countries[i])).style("stroke-width", 6);
 
             // add countries name
             
@@ -180,6 +183,7 @@ class DotChart {
         }
         }
 
+        
         if (this.tradeType == "Export") {
             // xPos = -vizWidth / 20 * i - this.padding.right - 40
             for (let i = 0; i < 10; i++) {
@@ -188,7 +192,7 @@ class DotChart {
                 .attr('y1', yAxis(this.DotChartData[this.findCountries[this.countries[i]]][1]))
                 .attr('x2', -vizWidth / 20 * i - this.padding.right - 40)
                 .attr('y2', yAxis(this.DotChartData[this.findCountries[this.countries[i]]][0]))
-                .style("stroke", "blue").style("stroke-width", 6);
+                .style("stroke", this.color(this.countries[i])).style("stroke-width", 6);
 
                 // add countries name
             
