@@ -15,6 +15,10 @@ let line_chart_Export = null;
 let chord_Importchart = null;
 let chord_Exportchart = null;
 
+let bDotImportchart = true;
+let bDotExportchart = true;
+
+let tools = new Tools();
 
 d3.csv('./ProcessedData/dataset2.csv')
     .then(dataOutput => {

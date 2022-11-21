@@ -2,7 +2,7 @@ var call_names;
 var that;
 class ChordChart {
     /**
-     * Creates a bubble chart Object
+     * Creates a chord chart Object
      */
 
     // https://observablehq.com/@d3/chord-diagram
@@ -332,17 +332,72 @@ class ChordChart {
                 let control_line = this.chordChart.select('#control_line').append('line').attr('x1', 0 ).attr('y1', -svg_h/2).attr('x2', 0).attr('y2', svg_h/2)
                 .style("stroke", "lightgreen").style("stroke-width", 10);
                 console.log('creat line');
+
                 bChordChartLine = false;
             }
+            let lastPos = null;
+            let bFirstIn = true;
             this.chordChart.on('mousemove', (event) =>{
+                if (bFirstIn) {lastPos = event.offsetX; bFirstIn = false};
                 let xpos = event.offsetX - svg_w / 2;
-                console.log(xpos);
+                
+
+                
+
+                let dot_Importchart = null;
+                let dot_Exportchart = null;
+
+                // --》
+                if (lastPos < event.offsetX) {
+                    console.log('------->');
+                    this.chordChart.select('#control_line').select('#left_rect').remove();
+                    if (xpos > 0 && bShowLine) {
+                        // this.chordChart.select('#control_line').select('#right_rect').remove();
+                        this.chordChart.select('#control_line').append('rect')
+                        .attr('x', 0)
+                        .attr('y', -svg_h /2)
+                        .attr('id', 'right_rect')
+                        .attr('width', Math.abs(xpos))
+                        .attr('height', svg_h).transition().duration(200).attr('fill', 'darkcyan').attr('opacity', 1);
+                    
+                        if (bDotImportchart) {
+                            dot_Importchart = new DotChart(this.originalData, "Import", 2020);
+                            dot_Importchart.renderLine();
+                            bDotImportchart = false;
+                        }
+                    }
+
+                    
+                    
+                }
+                if (lastPos > event.offsetX) {
+                    console.log('<-------');
+                        this.chordChart.select('#control_line').select('#right_rect').remove();
+                    if (xpos < 0 && bShowLine) {
+                        this.chordChart.select('#control_line').append('rect')
+                        .attr('x', xpos)
+                        .attr('y', -svg_h /2)
+                        .attr('id', 'left_rect')
+                        .attr('width', Math.abs(0 - xpos))
+                        .attr('height', svg_h).transition().duration(200).attr('fill', 'darkcyan').attr('opacity', 1);
+                    
+                        if (bDotExportchart) {
+                            dot_Exportchart = new DotChart(this.originalData, "Export", 2020);
+                            dot_Exportchart.renderLine();
+                            bDotExportchart = false;
+                        }
+                        
+                    }
+                }
                 this.chordChart.select('#control_line').select('line').attr('x1', xpos ).attr('y1', -svg_h/2).attr('x2', xpos).attr('y2', svg_h/2);
-                console.log('event', event.offsetX);
+                lastPos = event.offsetX;
+
             })
         }
         if (!bShowLine) {
             this.chordChart.select('#control_line').select('line').remove();
+            this.chordChart.select('#control_line').selectAll('rect').remove();
+            // this.chordChart.select('#control_line').select('#right_rect').remove();
             bChordChartLine = true;
 
         }

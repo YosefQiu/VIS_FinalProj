@@ -23,7 +23,6 @@ class LineChart {
         this.svg_w = svg_w;
         this.svg_h = svg_h;
 
-        console.log('shsha', svg_w, svg_h);
         this.bMouseMove = false;
         this.country = country;
     

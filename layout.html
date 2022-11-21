@@ -63,8 +63,8 @@
         
         .uibar {
             display: grid;
-            grid-template-columns: 4fr 1fr;
-            grid-auto-rows: auto auto;
+            grid-template-columns: 3fr 1fr 1fr;
+            grid-auto-rows: auto auto auto;
         }
 
         .toolbar{
@@ -155,8 +155,12 @@
 
         <div class="view1">
                 <svg id="chordCharts">
-                    <g id="Import"></g>
-                    <g id="Export"></g>
+                    <g id="Import">
+                        <g id="y-axis"></g>
+                    </g>
+                    <g id="Export">
+                        <g id="y-axis"></g>
+                    </g>
                     <g id="control_line"></g>
                 </svg>
         </div>
@@ -179,6 +183,8 @@
 
     <script src="js/ChordChart.js"></script>
     <script src="js/LineChart.js"></script>
+    <script src="js/DotChart.js"></script>
+    <script src="js/Tool.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

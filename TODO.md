@@ -42,3 +42,7 @@
 2. delete the ```html <div class="charts">```  in class view1 && class view2 
    - solves the bug of svg and the blank area below in the those view
 3. change the scale and translate in chordchart 
+4. add a dot chart
+   - [ ] show when mouse mouve and compare btn down
+   - [x] **bug** avg smaller than min ?
+5. add a tool for content class
