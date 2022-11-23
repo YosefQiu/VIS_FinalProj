@@ -105,7 +105,7 @@ var config = { childList: true };
 // Callback function to execute when mutations are observed
 var callback = function(mutationsList, observer) {
     let year = document.getElementById("rangeValue").textContent;
-    console.log("change year!")
+    //console.log(year)
     globalApplicationState.chord_Importchart.updateChart(year)
     globalApplicationState.chord_Exportchart.updateChart(year)
 };

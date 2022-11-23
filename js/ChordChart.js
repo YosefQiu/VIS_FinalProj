@@ -88,7 +88,11 @@ class ChordChart {
                     if (this.originalData[i].tradeType == this.TradeType) {
                         for (let j = 0; j < countries.length; j++) {
                             if (this.originalData[i].traders == countries[j]) {
-                                temp.push(this.originalData[i].TradeData[this.year-1992]);
+                                let dataValue = this.originalData[i].TradeData[this.year-1992];
+                                if (dataValue)
+                                    temp.push(dataValue);
+                                else
+                                    temp.push(0);
                             }
                         }
                     }
@@ -103,14 +107,6 @@ class ChordChart {
         }
         processData['VIE'][0] = 0;
 
-        // replace all NAN inside processData (some countries are missing data before 2020)
-        for (var key in processData) {
-            if (processData.hasOwnProperty(key)) {
-                processData[key].forEach(element => {
-                    element = element ? element: 0;
-                });
-            }
-        }
         let tradeSum = 0;
         for (let i = 0; i < countries.length; i++) {
             tradeSum += sum(processData[findCountries[countries[i]]]);
@@ -283,7 +279,15 @@ class ChordChart {
             .attr("xlink:href", "#countryName") 
             .style("text-anchor", "middle")
             .attr("startOffset", d => (d.startAngle + d.endAngle)/2 * outerRadius)
-            .text(d => `${this.names[d.index]}`)
+            .text(d => {
+                if(names[d.index]=="Vietnam" && year <2000){
+                    return "";
+                }
+                else{
+                    return `${this.names[d.index]}`;
+                }
+                
+            })
             .on("mouseover", (d, i) => {
                 //console.log(this.names[i.index]);
             })

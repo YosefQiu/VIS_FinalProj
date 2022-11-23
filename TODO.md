@@ -16,10 +16,10 @@
   - [X] title
   - [X] label
   - [ ] data change
-  - [ ] mouse click update line chart
+  - [x] mouse click update line chart
   - [x] color change
   - [x] mouse move highlight
-  - [ ] opacity too low conclicts with the background
+  - [x] opacity too low conclicts with the background
 - [ ] adjustment of layout size && position
 - [ ] tool tips
 - [ ] content
