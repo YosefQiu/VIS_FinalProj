@@ -15,12 +15,12 @@
   - [X] font size
   - [X] title
   - [X] label
-  - [x] data change
-  - [x] mouse click update line chart
+  - [ ] data change
+  - [ ] mouse click update line chart
   - [x] color change
   - [x] mouse move highlight
   - [ ] opacity too low conclicts with the background
-- [x] adjustment of layout size && position
+- [ ] adjustment of layout size && position
 - [ ] tool tips
 - [ ] content
   - [ ] add some content in the aside part
@@ -30,6 +30,8 @@
 - [x] background img
  
 
+text
+year widgets
 
 
 -----
@@ -44,9 +46,9 @@
    - solves the bug of svg and the blank area below in the those view
 3. change the scale and translate in chordchart 
 4. add a dot chart
-   - [x] show when mouse mouve and compare btn down
+   - [ ] show when mouse mouve and compare btn down
    - [x] **bug** avg smaller than min ?
-   - [x] hide and display
+   - [ ] hide and display
    - [ ] change the line and circle color
    - [ ] add countries name
 5. add a tool for content class

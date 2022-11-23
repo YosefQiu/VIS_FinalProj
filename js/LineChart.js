@@ -308,10 +308,10 @@ class LineChart {
            
         });
         svg.on('click', (event, d, i) => {
-            console.log('evnet', event);
-            console.log('d', d);
-            console.log('i', i);
-            console.log(event.target);
+            //console.log('evnet', event);
+            //console.log('d', d);
+            //console.log('i', i);
+            //console.log(event.target);
         })
         
     }

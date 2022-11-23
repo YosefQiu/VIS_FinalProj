@@ -1,7 +1,7 @@
 
 const globalApplicationState = {
-    ImportChord: null,
-    ExportChord: null,
+    chord_Importchart: null,
+    chord_Exportchart: null,
     ImportLine: null,
     ExportLine: null,
 };
@@ -77,21 +77,41 @@ d3.csv('./ProcessedData/dataset2.csv')
 
     
 
-    window.onload  = function(){
-        let option = document.getElementById("option");
-        let page_tt_label = document.getElementById("page_tt_label");
-        let page_tt= document.getElementById("page_tt");
-       
-           option.onchange = function(e){
-              let val = e.target.value;
-              page_tt.value = val;
-              page_tt_label.innerHTML = val;
-           }                           
-       }
-
-    let bubbleChart = new ForceBubbleChart();
-
-    document.getElementById('showLine_btn').onclick = function() {
-        bShowLine = !bShowLine;
-        chord_Exportchart.sliderWnd();
+window.onload  = function(){
+    let option = document.getElementById("option");
+    let page_tt_label = document.getElementById("page_tt_label");
+    let page_tt= document.getElementById("page_tt");
+    
+        option.onchange = function(e){
+            let val = e.target.value;
+            page_tt.value = val;
+            page_tt_label.innerHTML = val;
+        }                           
     }
+
+let bubbleChart = new ForceBubbleChart();
+
+document.getElementById('showLine_btn').onclick = function() {
+    bShowLine = !bShowLine;
+    chord_Exportchart.sliderWnd();
+}
+
+// Select the node that will be observed for mutations
+var targetNode = document.getElementById("rangeValue");
+
+// Options for the observer (which mutations to observe)
+var config = { childList: true };
+
+// Callback function to execute when mutations are observed
+var callback = function(mutationsList, observer) {
+    let year = document.getElementById("rangeValue").textContent;
+    console.log("change year!")
+    globalApplicationState.chord_Importchart.updateChart(year)
+    globalApplicationState.chord_Exportchart.updateChart(year)
+};
+
+// Create an observer instance linked to the callback function
+var observer = new MutationObserver(callback);
+
+// Start observing the target node for configured mutations
+observer.observe(targetNode, config);

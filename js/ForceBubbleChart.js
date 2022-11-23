@@ -11,7 +11,7 @@ class ForceBubbleChart
         b_w = document.getElementById("bubbleCharts").clientWidth;
         b_h = document.getElementById("bubbleCharts").clientHeight;
         
-        console.log(b_h, b_w);
+        //console.log(b_h, b_w);
         
         
         var width = b_w, height = b_h, sizeDivisor = 2500000, nodePadding = 2.5;
@@ -62,7 +62,7 @@ class ForceBubbleChart
                 //update the simulation based on the data
                 simulation
                     .nodes(graph)
-                    .force("collide", d3.forceCollide().strength(.5).radius(function(d){ console.log('dd', d); return d.radius + nodePadding; }).iterations(1))
+                    .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.radius + nodePadding; }).iterations(1))
                     .on("tick", function(d){
                         node
                             .attr("cx", function(d){ return d.x; })

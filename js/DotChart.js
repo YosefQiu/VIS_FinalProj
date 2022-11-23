@@ -116,7 +116,7 @@ class DotChart {
             tmp_yearData.push(parseFloat(this.DotChartData[this.findCountries[this.countries[i]]][3]));
         }
 
-        console.log(tmp_maxData, tmp_minData, tmp_avgData, tmp_yearData);
+        //console.log(tmp_maxData, tmp_minData, tmp_avgData, tmp_yearData);
 
         let yAxis = d3.scaleLinear()
             .domain([0, Math.max.apply(Math,tmp_maxData)])
