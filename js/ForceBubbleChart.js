@@ -13,7 +13,7 @@ class ForceBubbleChart
         
         //console.log(b_h, b_w);
         
-        
+        this.renderLegend();
         var width = b_w, height = b_h, sizeDivisor = 2500000, nodePadding = 2.5;
         
         var svg = bubbleChart;
@@ -114,5 +114,27 @@ class ForceBubbleChart
           return d;
         }
     }
-}
 
+    renderLegend() {
+        var color = d3.scaleOrdinal(['#d98032', '#ef3e36', '#17bebb', '#237373', '#2e282a', '#5e4c43']);
+        let name = ["East Asia & Pacific", "Europe & Central Asia", "Middle East & North Africa", "North America", "South Asia"];
+        
+        let bubbleChart = d3.select("#bubbleCharts");
+        let gLegend = bubbleChart.append('g').attr('id', 'g_legend');
+
+        gLegend
+                .attr("class", "node")
+                .selectAll("circle").data(name).join('circle')
+                .attr('cx', 20)
+                .attr('cy', function(d, i) {return 20 + 50 * i;})
+                .attr('r', 15)
+                .attr("fill", function(d) { return color(d); });
+        gLegend
+                .selectAll("text").data(name).join('text')
+                .attr('x', 50)
+                .attr('y', function(d, i) {return 25 + 50 * i;})
+                .text(function(d) { return d; })
+                .style("fill", "white")
+                .attr('font-size', '20px');
+    }
+}

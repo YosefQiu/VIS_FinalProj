@@ -39,7 +39,9 @@ class ChordChart {
         this.vizHeight = 500;
         this.TradeType = Tradetype;
         this.year = year;
-        //this.sliderWnd();
+
+        // TODO bug 
+        this.sliderWnd();
         this.updateChart(this.year)
         
         
@@ -316,11 +318,12 @@ class ChordChart {
         document.getElementById('id_aside').classList.add('aside_after');
         this.bLineChartInit = true;
         console.log('init finish========');
+        bLineChartCreate = true;
     }
 
     myCallback() {
         //console.log('call back');
-        //console.log(call_names);
+        console.log(call_names);
         this.bFirstZoom = false;
         //console.log("zoom", this.bFirstZoom);
         that.initLineChartSvg();
@@ -339,8 +342,7 @@ class ChordChart {
             if (bChordChartLine == true) {
                 let control_line = this.chordChart.select('#control_line').append('line').attr('x1', 0 ).attr('y1', -svg_h/2).attr('x2', 0).attr('y2', svg_h/2)
                 .style("stroke", "lightgreen").style("stroke-width", 10);
-                //console.log('creat line');
-
+               
                 bChordChartLine = false;
             }
             let lastPos = null;
@@ -352,10 +354,13 @@ class ChordChart {
                 // --》
                 if (lastPos < event.offsetX) {
                     //console.log('------->');
+                    bCurrentRight = true;
+                    bCurrentLeft = false;
                     this.chordChart.select('#control_line').select('#left_rect').remove();
-                    
                     if (xpos > 0 && bShowLine) {
                         // this.chordChart.select('#control_line').select('#right_rect').remove();
+
+                       
                         this.chordChart.select('#control_line').append('rect')
                         .attr('x', 0)
                         .attr('y', -svg_h /2)
@@ -365,6 +370,7 @@ class ChordChart {
                     
                         if (bDotImportchart) {
                             dot_Importchart = new DotChart(this.originalData, "Import", 2020);
+                            globalApplicationState.dot_ImportChart = dot_Importchart;
                             dot_Importchart.renderAxis();
                             dot_Importchart.renderChart();
                             bDotImportchart = false;
@@ -380,7 +386,8 @@ class ChordChart {
                 }
                 if (lastPos > event.offsetX) {
                     //console.log('<-------');
-                    
+                    bCurrentRight = false;
+                    bCurrentLeft = true;
                     this.chordChart.select('#control_line').select('#right_rect').remove();
                     if (xpos < 0 && bShowLine) {
                         this.chordChart.select('#control_line').append('rect')
@@ -392,12 +399,12 @@ class ChordChart {
                     
                         if (bDotExportchart) {
                             dot_Exportchart = new DotChart(this.originalData, "Export", 2020);
+                            globalApplicationState.dot_Exportchart = dot_Exportchart;
                             dot_Exportchart.renderAxis();
                             dot_Exportchart.renderChart();
                             bDotExportchart = false;
                         }
                         if (dot_Importchart != null) {
-                            //console.log('clearrrrrrrrrr im');
                             dot_Importchart.renderClear("Import");
                         }
 
@@ -415,7 +422,6 @@ class ChordChart {
         if (!bShowLine) {
             this.chordChart.select('#control_line').select('line').remove();
             this.chordChart.select('#control_line').selectAll('rect').remove();
-            // this.chordChart.select('#control_line').select('#right_rect').remove();
 
             if (dot_Importchart != null) {
                 dot_Importchart.renderClear("Import");

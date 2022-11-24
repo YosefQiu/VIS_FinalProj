@@ -94,7 +94,7 @@ h1 {
 .showLine {
   text-align: center;
   background: #fcfcfc;
-  box-shadow: 0px 15px 40px #7E6D5766;
+  box-shadow: 0px 15px 40px #ffffff;
   border-radius: 12px;
   border-color: transparent;
   height: 63px;
@@ -124,7 +124,7 @@ h1 {
 .page_select .page_tt{
    text-align: center;
    background: #fcfcfc;
-   box-shadow: 0px 15px 40px #7E6D5766;
+   box-shadow: 0px 15px 40px #ffffff;
    padding-top: 23px;
    border-radius: 12px;
    color: #444444;
@@ -178,7 +178,7 @@ h1 {
   border-radius: 20px;
   display: flex;
   align-items: center;
-  box-shadow: 0px 15px 40px #7E6D5766;
+  box-shadow: 0px 15px 40px #ffffff;
 }
 
 .slider p {

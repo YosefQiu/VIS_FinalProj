@@ -37,9 +37,9 @@ year widgets
 -----
 **what i change**
 1. new **index.html** called **layout.html**, complete the following before rename.
-   - [ ] **home page btn** in the **aboutPage.html**
-   - [ ] **home page btn** in the **layout.html**
-   - [ ] change **layout.html** to **index.html** && delete orginal **index.html**
+   - [x] **home page btn** in the **aboutPage.html**
+   - [x] **home page btn** in the **layout.html**
+   - [x] change **layout.html** to **index.html** && delete orginal **index.html**
    - [ ] keep the background color first to check whether the layout is correct
 
 2. delete the ```html <div class="charts">```  in class view1 && class view2 

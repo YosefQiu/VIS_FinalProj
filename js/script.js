@@ -1,13 +1,14 @@
-
 const globalApplicationState = {
     chord_Importchart: null,
     chord_Exportchart: null,
     ImportLine: null,
     ExportLine: null,
+    dot_Importchart: null,
+    dot_ExportcHart: null,
 };
 
 let bChordChartLine = true;
-let bShowLine = true;
+let bShowLine = false;
 
 let line_chart_Import = null;
 let line_chart_Export = null;
@@ -20,6 +21,11 @@ let dot_Exportchart = null;
 
 let bDotImportchart = true;
 let bDotExportchart = true;
+
+let bCurrentLeft = false;
+let bCurrentRight = false;
+
+let bLineChartCreate = false;
 
 let tools = new Tools();
 
@@ -80,14 +86,33 @@ d3.csv('./ProcessedData/dataset2.csv')
 window.onload  = function(){
     let option = document.getElementById("option");
     let page_tt_label = document.getElementById("page_tt_label");
-    let page_tt= document.getElementById("page_tt");
+    let page_tt = document.getElementById("page_tt");
     
-        option.onchange = function(e){
+    option.onchange = function(e){
             let val = e.target.value;
             page_tt.value = val;
             page_tt_label.innerHTML = val;
-        }                           
+            getSelectValue();
+    }                           
+}
+
+function getSelectValue() {
+    let option = document.getElementById("option");
+    let page_tt_label = document.getElementById("page_tt_label");
+    let page_tt = document.getElementById("page_tt");
+    let value = page_tt_label.innerHTML;
+    console.log(value);
+    if (bLineChartCreate == true) {
+        call_names = value;
+        globalApplicationState.ImportLine.updateLineChart(value);
     }
+    if (bLineChartCreate == false) {
+        alert("Please select a country you are interseted in the chord chart first....");
+    }
+
+    return value;
+}
+
 
 let bubbleChart = new ForceBubbleChart();
 
@@ -106,8 +131,13 @@ var config = { childList: true };
 var callback = function(mutationsList, observer) {
     let year = document.getElementById("rangeValue").textContent;
     //console.log(year)
-    globalApplicationState.chord_Importchart.updateChart(year)
-    globalApplicationState.chord_Exportchart.updateChart(year)
+
+    globalApplicationState.chord_Importchart.updateChart(year);
+    globalApplicationState.chord_Exportchart.updateChart(year);
+    
+    globalApplicationState.dot_Importchart.updateChart("Import", year);
+    globalApplicationState.dot_Exportchart.updateChart("Export", year);
+    
 };
 
 // Create an observer instance linked to the callback function

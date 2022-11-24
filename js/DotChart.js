@@ -3,12 +3,11 @@ class DotChart {
         this.originalData = data;
         this.year = year;
         this.tradeType = Tradetype;
-
+        this.bImportAxis = false;
+        this.bExportAxis = false;
         this.padding = { left: 50, bottom: 150, right: 50};
 
-        this.processData(this.tradeType, this.year)
-
-        //this.renderLine();
+        this.processData(this.tradeType, this.year);
     }
 
 
@@ -89,51 +88,63 @@ class DotChart {
     }
 
     renderAxis() {
-        this.dotChart = d3.select("#dotCharts");
-        let svg_w = d3.select("#chordCharts").attr('width');
-        let svg_h = d3.select("#chordCharts").attr('height');
 
-        svg_w = document.getElementById("chordCharts").clientWidth;
-        svg_h = document.getElementById("chordCharts").clientHeight;
-
-        this.svg_w = svg_w;
-        this.svg_h = svg_h;
-        this.vizWidth = svg_w / 2;
-        this.vizHeight = svg_h / 2;
-
-        let vizWidth = this.vizWidth;
-        let vizHeight = this.vizHeight;
+        if (this.bImportAxis == true) {
+            this.dotChart.select('#Import').select('#y-axis').attr('opacity', '1');
+            this.bImportAxis == false;
+        }
+        else if (this.bExportAxis == true) {
+            this.dotChart.select('#Export').select('#y-axis').attr('opacity', '1');
+            this.bExportAxis == false;
+        }
+        else {
+            this.dotChart = d3.select("#dotCharts");
+            let svg_w = d3.select("#chordCharts").attr('width');
+            let svg_h = d3.select("#chordCharts").attr('height');
+    
+            svg_w = document.getElementById("chordCharts").clientWidth;
+            svg_h = document.getElementById("chordCharts").clientHeight;
+    
+            this.svg_w = svg_w;
+            this.svg_h = svg_h;
+            this.vizWidth = svg_w / 2;
+            this.vizHeight = svg_h / 2;
+    
+            let vizWidth = this.vizWidth;
+            let vizHeight = this.vizHeight;
+            
+    
+            let tmp_maxData = [];
+            let tmp_minData = [];
+            let tmp_avgData = [];
+            let tmp_yearData = [];
+            for (let i = 0; i < 10; i++) {
+                tmp_maxData.push(parseFloat(this.DotChartData[this.findCountries[this.countries[i]]][0]));
+                tmp_minData.push(parseFloat(this.DotChartData[this.findCountries[this.countries[i]]][1]));
+                tmp_avgData.push(parseFloat(this.DotChartData[this.findCountries[this.countries[i]]][2]));
+                tmp_yearData.push(parseFloat(this.DotChartData[this.findCountries[this.countries[i]]][3]));
+            }
+    
+            //console.log(tmp_maxData, tmp_minData, tmp_avgData, tmp_yearData);
+    
+            let yAxis = d3.scaleLinear()
+                .domain([0, Math.max.apply(Math,tmp_maxData)])
+                .range([-vizHeight / 2, vizHeight / 2 ])
+                .nice();
+            this.yAxis = yAxis;
+            if (this.tradeType == 'Import') {
+                this.dotChart.select('#Import').select('#y-axis')
+                .attr('transform', `translate(${this.padding.left},${0})`)
+                .call(d3.axisLeft(yAxis).tickFormat(d3.format('.2s')));   
+            }
+    
+            if (this.tradeType == 'Export') {
+                this.dotChart.select('#Export').select('#y-axis')
+                .attr('transform', `translate(${-this.padding.right},${0})`)
+                .call(d3.axisRight(yAxis).tickFormat(d3.format('.2s')));
+            }
+        }
         
-
-        let tmp_maxData = [];
-        let tmp_minData = [];
-        let tmp_avgData = [];
-        let tmp_yearData = [];
-        for (let i = 0; i < 10; i++) {
-            tmp_maxData.push(parseFloat(this.DotChartData[this.findCountries[this.countries[i]]][0]));
-            tmp_minData.push(parseFloat(this.DotChartData[this.findCountries[this.countries[i]]][1]));
-            tmp_avgData.push(parseFloat(this.DotChartData[this.findCountries[this.countries[i]]][2]));
-            tmp_yearData.push(parseFloat(this.DotChartData[this.findCountries[this.countries[i]]][3]));
-        }
-
-        //console.log(tmp_maxData, tmp_minData, tmp_avgData, tmp_yearData);
-
-        let yAxis = d3.scaleLinear()
-            .domain([0, Math.max.apply(Math,tmp_maxData)])
-            .range([-vizHeight / 2, vizHeight / 2 ])
-            .nice();
-        this.yAxis = yAxis;
-        if (this.tradeType == 'Import') {
-            this.dotChart.select('#Import').select('#y-axis')
-            .attr('transform', `translate(${this.padding.left},${0})`)
-            .call(d3.axisLeft(yAxis).tickFormat(d3.format('.2s')));   
-        }
-
-        if (this.tradeType == 'Export') {
-            this.dotChart.select('#Export').select('#y-axis')
-            .attr('transform', `translate(${-this.padding.right},${0})`)
-            .call(d3.axisRight(yAxis).tickFormat(d3.format('.2s')));
-        }
     }
      
     renderChart() {
@@ -155,7 +166,14 @@ class DotChart {
             .style("stroke", this.color(this.countries[i])).style("stroke-width", 6);
 
             // add countries name
-            
+            this.dotChart.select('#Import').append('text')
+            .attr('x', vizWidth / 20 * i + this.padding.left + 30)
+            .attr('y', yAxis(this.DotChartData[this.findCountries[this.countries[i]]][1]) - 10)
+            .text(this.findCountries[this.countries[i]])
+            .style("fill", "white")
+            .attr('font-size', '10px');
+
+
             // add circle
             this.dotChart.select('#Import').append('circle')
             .attr('cx', vizWidth / 20 * i + this.padding.left + 40)
@@ -173,7 +191,7 @@ class DotChart {
             .attr('cx', vizWidth / 20 * i + this.padding.left + 40)
             .attr('cy', yAxis(this.DotChartData[this.findCountries[this.countries[i]]][2] / 28))
             .attr('r', 5)
-            .style("stroke", "black").style('fill', 'black').style("stroke-width", 2);
+            .style("stroke", "black").style('fill', '#134F5C').style("stroke-width", 2);
 
             this.dotChart.select('#Import').append('circle')
             .attr('cx', vizWidth / 20 * i + this.padding.left + 40)
@@ -195,7 +213,12 @@ class DotChart {
                 .style("stroke", this.color(this.countries[i])).style("stroke-width", 6);
 
                 // add countries name
-            
+                this.dotChart.select('#Export').append('text')
+                .attr('x', -vizWidth / 20 * i - this.padding.right - 50)
+                .attr('y', yAxis(this.DotChartData[this.findCountries[this.countries[i]]][1]) - 10)
+                .text(this.findCountries[this.countries[i]])
+                .style("fill", "white")
+                .attr('font-size', '10px');
 
                 // add circle
                 this.dotChart.select('#Export').append('circle')
@@ -214,7 +237,7 @@ class DotChart {
                 .attr('cx', -vizWidth / 20 * i - this.padding.right - 40)
                 .attr('cy', yAxis(this.DotChartData[this.findCountries[this.countries[i]]][2] / 28))
                 .attr('r', 5)
-                .style("stroke", "black").style('fill', 'black').style("stroke-width", 2);
+                .style("stroke", "black").style('fill', '#134F5C').style("stroke-width", 2);
 
                 this.dotChart.select('#Export').append('circle')
                 .attr('cx', -vizWidth / 20 * i - this.padding.right - 40)
@@ -225,18 +248,31 @@ class DotChart {
         }
     }
     
-
     renderClear(tradeType) {
         if (tradeType == "Import") {
-            this.dotChart.select('#Import').select('#y-axis').remove();
+            this.dotChart.select('#Import').select('#y-axis').attr('opacity', '0');
+            this.dotChart.select('#Import').append('g').attr('id', '#y-axis');
             this.dotChart.select('#Import').selectAll('line').remove();
             this.dotChart.select('#Import').selectAll('circle').remove();
+            this.dotChart.select('#Import').selectAll('text').remove();
+            this.bImportAxis = true;
         }
 
         if (tradeType == "Export") {
-            this.dotChart.select('#Export').select('#y-axis').remove();
+            this.dotChart.select('#Export').select('#y-axis').attr('opacity', '0');
             this.dotChart.select('#Export').selectAll('line').remove();
             this.dotChart.select('#Export').selectAll('circle').remove();
+            this.dotChart.select('#Export').selectAll('text').remove();
+            this.bExportAxis = true;
         }
+    }
+
+    async updateChart(tradeType, year) {
+        this.renderClear();
+        this.processData(tradeType, year);
+        //this.renderAxis();
+    
+        //await this.renderChart();
+    
     }
 }

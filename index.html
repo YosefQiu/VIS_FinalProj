@@ -9,7 +9,7 @@
             grid-template-columns: 2fr 2fr 1fr;
             grid-auto-rows: 150px 100px, auto, 80px;
             gap: 10px;
-            background-image: url(./img/background.gif);
+            background-image: url('./img/background.gif');
         }
         nav {
             /* background-color: orange; */
@@ -19,7 +19,7 @@
             grid-column-end: 4;
         }
         .view0 {
-            background-color: rgb(139, 0, 21);
+            /* background-color: rgb(139, 0, 21); */
             height:100px;
             grid-column-start: 1;
             grid-column-end: 3;
@@ -33,17 +33,37 @@
             grid-column-end: 3;
             grid-row-start: 3;
             grid-row-end: 4;
+            /* opacity: 0.7; */
         }
         .view2 {
-            background-color: rgb(255, 255, 255);
+            /* background-color: rgb(255, 255, 255); */
             height:800px;
             grid-column-start: 1;
             grid-column-end: 3;
             grid-row-start: 4;
             grid-row-end: 5;
+            /* opacity: 0.7; */
         }
+        .view2 #y-axis path {
+            stroke: white;
+        } 
+        .view2 #x-axis path {
+            stroke: white;
+        } 
+        .view2 #y-axis line {
+            stroke: white;
+        } 
+        .view2 #x-axis line {
+            stroke: white;
+        } 
+        .view2 #y-axis text {
+            stroke: white;
+        } 
+        .view2 #x-axis text {
+            stroke: white;
+        } 
         .view3 {
-            background-color: rgb(255, 255, 255);
+            /* background-color: rgb(255, 255, 255); */
             height:800px;
             grid-column-start: 1;
             grid-column-end: 3;
@@ -94,8 +114,8 @@
             color: #DC143C;
         }
         .node circle {
-        stroke: #3a403d;
-        stroke-width: 5px;
+            stroke: #3a403d;
+            stroke-width: 5px;
         }
         
     </style>
@@ -109,7 +129,7 @@
         <nav>     
             <h2 class="main_title">Worldwide Importing&Exporting Trading Data Visualization</h2>  
         <div class="toolbar">
-            <span onclick="location.href='./layout.html'" class="button">Home Page</span>
+            <span onclick="location.href='./index.html'" class="button">Home Page</span>
             <span class="button">Project Proposal</span>
             <span onclick="location.href='./About.html'" class="button">About</span>
             <span class="button">Video</span>
