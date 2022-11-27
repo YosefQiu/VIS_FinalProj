@@ -21,7 +21,7 @@ function getCountryIdx(countryName) {
         case 'China':return 1; break;
         case 'United States': return 0; break;
         case 'Japan': return 4; break;
-        case 'Korea, Rep': return 5; break;
+        case 'Korea, Rep.': return 5; break;
         case 'Australia': return 2; break;
         case 'Malaysia': return 6; break;
         case 'Germany': return 3; break;
