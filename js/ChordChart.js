@@ -261,6 +261,9 @@ class ChordChart {
                     globalApplicationState.ImportLine = new LineChart(this.originalData, "Import",names[i.index]);
                     globalApplicationState.ImportLine = new LineChart(this.originalData, "Export",names[i.index]);
                     globalApplicationState.ImportLine.updateLineChart(names[i.index]);
+                    
+                    // let tools = new Tools('./foo.txt');
+                    let obj_txt = load('./foo.txt', names[i.index]);
                 }
                 this.bFirstZoom = false;
             })
@@ -303,6 +306,8 @@ class ChordChart {
         let svg = d3.select('#pre_view2').append('svg');
         svg.attr('id', 'lineCharts').attr("width", '100%').attr("height", '100%');
 
+        let svg_txt = svg.append('g').attr('id', "g_txt");
+
         let svg_import = svg.append('g').attr('id', "Import");
         svg_import.append('g').attr('id', "lines");
         svg_import.append('g').attr('id', "overlay");
@@ -332,6 +337,8 @@ class ChordChart {
         globalApplicationState.ImportLine = new LineChart(that.originalData, "Export",call_names);
         globalApplicationState.ImportLine.updateLineChart(call_names);
         
+        // let tools = new Tools('./foo.txt');
+        let obj_txt = load('./foo.txt', call_names);
     }
 
     sliderWnd() {

@@ -27,7 +27,11 @@ let bCurrentRight = false;
 
 let bLineChartCreate = false;
 
-let tools = new Tools();
+
+
+
+
+
 
 d3.csv('./ProcessedData/dataset2.csv')
     .then(dataOutput => {
