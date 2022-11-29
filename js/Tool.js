@@ -66,6 +66,19 @@ function addContent(content, countryName) {
        }
     }
 
+    if (index == 2) {
+        let str = content[index];
+        let strs = str.split("!!!!") ;
+       for (let i = 0; i < strs.length; i++) {
+        svg.append('text')
+            .attr('x', 30)
+            .attr('y', 30 + i * 30)
+            .attr('font-size', '30px')
+            .style('fill', 'white')
+            .text(strs[i]);
+       }
+    }
+
     else {
         let str = content[index];
         let strs = str.split("!!!!") ;
