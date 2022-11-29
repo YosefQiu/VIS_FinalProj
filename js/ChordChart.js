@@ -393,7 +393,7 @@ class ChordChart {
                     
                         if (bDotImportchart) {
                             dot_Importchart = new DotChart(this.originalData, "Import", 2020);
-                            globalApplicationState.dot_ImportChart = dot_Importchart;
+                            globalApplicationState.dot_Importchart = dot_Importchart;
                             dot_Importchart.renderAxis();
                             dot_Importchart.renderChart();
                             bDotImportchart = false;
